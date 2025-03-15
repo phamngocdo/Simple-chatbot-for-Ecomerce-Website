@@ -12,5 +12,5 @@ def get_db_connection():
         print("Can not connect database:", e)
         return None
 
-if __name__ == "main":
-    get_db_connection()
+if __name__ == "__main__":
+    db = get_db_connection()
