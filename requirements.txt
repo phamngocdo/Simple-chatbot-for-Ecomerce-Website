@@ -1,5 +1,9 @@
-langchain==0.3.19
+langchain-community==0.3.19
+langchain==0.3.20
 mysql-connector-python==9.2.0
 python-dotenv==1.0.1
 fastapi==0.115.8
 datetime
+unstructured
+Markdown
+gpt4all=2.8.2
