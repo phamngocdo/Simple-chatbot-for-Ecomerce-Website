@@ -7,12 +7,11 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 
-from routes.auth import auth_router
-from routes.users import users_router
-from routes.products import products_router
-from routes.reviews import reviews_router
-from routes.chat import chat_router
-from routes.web import web_router
+from routers.users import users_router
+from routers.products import products_router
+from routers.reviews import reviews_router
+from routers.chat import chat_router
+from routers.web import web_router
 
 from chat_model.llm_chatbot import LlmChatBot
 
@@ -22,7 +21,6 @@ app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="src/static"), name="static")
 
-app.include_router(auth_router, prefix="/api/auth", tags=["Auth"])
 app.include_router(users_router, prefix="/api/users", tags=["Users"])
 app.include_router(products_router, prefix="/api/products", tags=["Products"])
 app.include_router(reviews_router, prefix="/api/reviews", tags=["Reviews"])
@@ -37,7 +35,7 @@ async def root(request: Request):
 
 def start():
     port = int(os.getenv("CHAT_PORT", 3000))
-    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=False, reload_dirs="/src")
 
 if __name__ == "__main__":
     chatbot = LlmChatBot()

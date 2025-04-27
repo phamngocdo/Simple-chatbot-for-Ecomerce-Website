@@ -19,7 +19,7 @@ class ProductModel(Base):
     stock = Column(Integer, nullable=False, default=0)
     image_urls = Column(Text, nullable=True)
     category_id = Column(Integer, ForeignKey('categories.id', ondelete="SET NULL"), nullable=False)
-    seller_id = Column(Integer, ForeignKey('sellers.id', ondelete="CASCADE"), nullable=False)
+    seller_id = Column(Integer, ForeignKey('users.id', ondelete="CASCADE"), nullable=False)
     created_at = Column(TIMESTAMP, server_default=func.now(), nullable=False)
     updated_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now(), nullable=False)
 
