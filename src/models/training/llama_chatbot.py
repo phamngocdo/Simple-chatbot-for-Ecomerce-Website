@@ -5,17 +5,17 @@ from langchain_community.embeddings import GPT4AllEmbeddings
 
 
 class LlamaChatBot:
-    def __init__(self, model_path, vector_word_path):
-        self.model_path = model_path
-        self.word_path = vector_word_path
+    def __init__(self):
+        pass
     
-    def word_embedded(self, text=None):
-        text_splitter = RecursiveCharacterTextSplitter(
-            separators='\n',
-            chunk_size=500,
-            chunk_overlap=50,
-            length_function=len
-        )
+    def load_model(self):
+        pass
 
-        chunks = text_splitter.split_text(text=text)
-    
+    def save_model(self):
+        pass
+
+    def create_qa_chain(self):
+        pass
+
+    def get_response(self):
+        pass

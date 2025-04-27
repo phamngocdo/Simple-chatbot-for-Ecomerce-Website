@@ -7,3 +7,4 @@ datetime
 unstructured
 Markdown
 gpt4all=2.8.2
+pymongo=4.11.3

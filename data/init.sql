@@ -1,12 +1,17 @@
-CREATE DATABASE uet_store;
-USE uet_store;
+DROP DATABASE IF EXISTS e_commerce;
+CREATE DATABASE e_commerce;
+USE e_commerce;
 
 CREATE TABLE users (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50) UNIQUE NOT NULL,
+    username VARCHAR(50) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     role ENUM('user', 'admin') NOT NULL DEFAULT 'user',
+    phone VARCHAR(20),
+    address TEXT,
+    city VARCHAR(100),
+    postal_code VARCHAR(20),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -70,15 +75,6 @@ CREATE TABLE reviews (
     FOREIGN KEY (buyer_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-CREATE TABLE chatbot_messages (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
-    message TEXT NOT NULL,
-    response TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-);
-
 CREATE TABLE cart_items (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -89,38 +85,11 @@ CREATE TABLE cart_items (
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
-LOCK TABLES `cart_items` WRITE;
-INSERT INTO `cart_items` VALUES (1,2,14,1,'2025-03-05 13:38:47'),(2,2,15,2,'2025-03-05 13:38:47');
-UNLOCK TABLES;
-
-
-LOCK TABLES `categories` WRITE;
-INSERT INTO `categories` VALUES (1,'phone','Iphone, samsung, huawei','2025-03-05 12:45:45','2025-03-05 12:45:45'),(2,'computer','pc, laptop','2025-03-05 12:45:45','2025-03-05 12:45:45'),(3,'watch','smart watch','2025-03-05 12:45:45','2025-03-05 12:56:10'),(4,'camera','camera','2025-03-05 12:45:45','2025-03-05 12:45:45'),(5,'headphone','headphone','2025-03-05 12:45:45','2025-03-05 12:45:45'),(6,'gaming','device for gaming','2025-03-05 12:45:45','2025-03-05 12:45:45');
-UNLOCK TABLES;
-
-LOCK TABLES `chatbot_messages` WRITE;
-UNLOCK TABLES;
-
-
-LOCK TABLES `order_items` WRITE;
-INSERT INTO `order_items` VALUES (1,1,2,1,'2025-03-05 13:57:51'),(2,1,24,1,'2025-03-05 13:57:51'),(3,1,21,2,'2025-03-05 13:57:51'),(4,2,25,1,'2025-03-05 14:04:06'),(5,3,24,1,'2025-03-05 14:04:06'),(6,3,22,3,'2025-03-05 14:04:06');
-UNLOCK TABLES;a
-
-LOCK TABLES `orders` WRITE;
-INSERT INTO `orders` VALUES (1,3,1451.96,'shipped','Nguyen Thanh Lam','333333','Xuan Thuy','Ha Noi','1020','2025-03-05 13:56:46','2025-03-05 13:56:46'),(2,5,749.99,'confirmed','Duong Van Long','44444','Xuan Thuy','Ha Noi','1020','2025-03-05 14:02:05','2025-03-05 14:02:05'),(3,5,754.96,'shipped','Duong Van Long','696969','Xuan Thuy','ha Noi','3020','2025-03-05 14:02:05','2025-03-05 14:05:45');
-UNLOCK TABLES;
-
-
-LOCK TABLES `products` WRITE;
-INSERT INTO `products` VALUES (1,'RTX 5080 16GB Ventus','The NVIDIA GeForce RTX 5080 is a next-generation graphics card built on the NVIDIA Blackwell architecture, featuring fifth-generation Tensor Cores and fourth-generation RT Cores.',2799.99,10,'https://product.hstatic.net/1000333506/product/1024_1810cfc496c543b9b3090aa3d486b2b5.png',6,2,'2025-03-05 13:31:29','2025-03-05 13:31:29'),(2,'Apple Watch Series 9','Apple Watch Series 9 [GPS 41mm] Smartwatch with Midnight Aluminum Case with Midnight Sport Band M/L. Fitness Tracker, ECG Apps, Always-On Retina Display, Water Resistant',769.99,3,'https://m.media-amazon.com/images/I/61MCe60kORL._AC_SX522_.jpg',3,2,'2025-03-05 13:31:29','2025-03-05 14:03:05'),(3,'CMF Watch Pro 2','CMF Watch Pro 2 Smartwatch for Men Women, Fitness Tracker with Heart Rate, SpO₂ Monitoring,120 Sports Model, Bluetooth Calls with AI Noise Reduction, IP68 Waterproof with GPS for Android IOS Dark Grey',39.99,5,'https://m.media-amazon.com/images/I/61hlJBE612L._AC_SX466_.jpg',3,2,'2025-03-05 13:31:29','2025-03-05 13:31:29'),(4,'Acer Aspire 3 A315-24P-R7VH','Acer Aspire 3 A315-24P-R7VH Slim Laptop | 15.6\" Full HD IPS Display | AMD Ryzen 3 7320U Quad-Core Processor | AMD Radeon Graphics | 8GB LPDDR5 | 128GB NVMe SSD | Wi-Fi 6 | Windows 11 Home in S Mode',299.99,3,'https://m.media-amazon.com/images/I/61gKkYQn6lL._AC_SX466_.jpg',2,3,'2025-03-05 13:31:29','2025-03-05 13:31:29'),(5,'2023 Apple Mac','2023 Apple Mac with Apple M2 Chip with 8-core CPU (8GB RAM, 256GB SSD Storage) (QWERTY English) Silver',369.99,5,'https://m.media-amazon.com/images/I/61La8PAa42L._AC_SX466_.jpg',2,3,'2025-03-05 13:31:29','2025-03-05 13:31:29'),(6,'Apple 2024 Mac Mini','Apple 2024 Mac Mini Desktop Computer with M4 chip with 10‑core CPU and 10‑core GPU: Built for Apple Intelligence, 24GB Unified Memory, 256GB SSD Storage, Gigabit Ethernet. Works with iPhone/iPad',789.99,5,'https://m.media-amazon.com/images/I/615y53Ws-NL._AC_SX466_.jpg',2,3,'2025-03-05 13:31:29','2025-03-05 13:31:29'),(7,'2018 Apple Mac Mini','2018 Apple Mac Mini with 3.0GHz Intel Core i5 (8GB RAM, 512GB SSD Storage) Gray (Renewed)',229.99,5,'https://m.media-amazon.com/images/I/71AgyhMcBeL._AC_SX466_.jpg',2,3,'2025-03-05 13:31:29','2025-03-05 13:31:29'),(8,'ASUS Chromebook Laptop Student','ASUS Chromebook Laptop Student Business 2024, 14\" FHD Anti-Glare Display, 8-Core MediaTek Kompanio 520, 4GB RAM, 128GB (64GB eMMC+64GB Card), Webcam, WiFi, 15+ Hrs Battery, Chrome OS +HubxcelAccessory',209.99,3,'https://m.media-amazon.com/images/I/61wR4i8il-L._AC_SX466_.jpg',2,3,'2025-03-05 13:31:29','2025-03-05 13:31:29'),(9,'ASUS ROG Strix G16','ASUS ROG Strix G16 Gaming Laptop, 16” 16:10 FHD 165Hz Display, NVIDIA® GeForce RTX™ 4060, Intel Core i7-13650HX, 16GB DDR5, 1TB PCIe Gen4 SSD, Wi-Fi 6E, Windows 11, G614JV-AS74',1299.99,1,'https://m.media-amazon.com/images/I/81GrCeuCzxL._AC_SX466_.jpg',2,3,'2025-03-05 13:31:29','2025-03-05 13:31:29'),(10,'Lenovo ThinkPad E16','Business Laptop, 16\" WUXGA Display, AMD Ryzen 5 7530U (Beat i7-1165G7), 24GB RAM, 1TB PCIe SSD, Webcam, HDMI, RJ-45, Fingerprint Reader, Wi-Fi 6, Windows 11 Pro, Black',654.99,5,'https://m.media-amazon.com/images/I/712KStt+31L._AC_SX466_.jpg',2,3,'2025-03-05 13:31:29','2025-03-05 13:31:29'),(11,'Raycon Everyday Earbuds','Raycon Everyday Earbuds (2024 Edition) - Bluetooth True Wireless in-Ear Buds with 32 Hours Playtime, Multpoint Technology, Extreme Comfort, and Active Noise Cancellation (Carbon Black)',79.99,5,'https://m.media-amazon.com/images/I/61Sbw7sQWjL._AC_SX466_.jpg',5,3,'2025-03-05 13:31:29','2025-03-05 13:31:29'),(12,'JBL Tune 510BT','JBL Tune 510BT - Bluetooth headphones with up to 40 hours battery, microphone for call, foldable and comfortable, Android and iOs compatible (Blue)',39.99,3,'https://m.media-amazon.com/images/I/61FUX7QmifS._AC_SX466_.jpg',5,3,'2025-03-05 13:31:29','2025-03-05 13:31:29'),(13,'Sony WH-CH720N','Sony WH-CH720N Noise Canceling Wireless Headphones Bluetooth Over The Ear Headset with Microphone and Alexa Built-in, Black New',39.99,2,'https://m.media-amazon.com/images/I/51q3-5not5L.__AC_SX300_SY300_QL70_FMwebp_.jpg',5,3,'2025-03-05 13:31:29','2025-03-05 13:31:29'),(14,'Apple AirPods (2nd Gen)','Apple AirPods (2nd Gen) Wireless Ear Buds + Lightning Charging Case + Lightning to USB Cable + 1 Year Limited Warranty',29.99,10,'https://m.media-amazon.com/images/I/41roAPXkT5L._AC_SY606_.jpg',5,3,'2025-03-05 13:31:29','2025-03-05 13:31:29'),(15,'Canon EOS Rebel T7','Canon EOS Rebel T7 DSLR Camera with 18-55mm Lens | Built-in Wi-Fi | 24.1 MP CMOS Sensor | DIGIC 4+ Image Processor and Full HD Videos',479.99,6,'https://m.media-amazon.com/images/I/61BKYlNqH6L._AC_SX466_.jpg',4,2,'2025-03-05 13:31:29','2025-03-05 13:31:29'),(16,'Saneen Digital Camera','Saneen Digital Camera, 4k Cameras for Photography & Video, 64MP WiFi Touch Screen Vlogging Camera for YouTube with Flash, 32GB Card, Lens Hood, 3000mAH Battery, Front and Rear Cameras - Black',159.99,5,'https://m.media-amazon.com/images/I/711X0g9zd5L._AC_SX466_.jpg',4,2,'2025-03-05 13:31:29','2025-03-05 13:31:29'),(17,'KODAK PIXPRO','KODAK PIXPRO Friendly Zoom FZ45-WH 16MP Digital Camera with 4X Optical Zoom 27mm Wide Angle and 2.7\" LCD Screen (White)',89.99,4,'https://m.media-amazon.com/images/I/71iABxYS-eL._AC_SX466_.jpg',4,2,'2025-03-05 13:31:29','2025-03-05 13:31:29'),(18,'MSI Gaming GeForce RTX 4060 8GB','MSI Gaming GeForce RTX 4060 8GB GDRR6 Extreme Clock: 2505 MHz 128-Bit HDMI/DP Nvlink TORX Fan 4.0 Ada Lovelace Architecture Graphics Card (RTX 4060 Ventus 2X White 8G OC)',999.99,8,'https://m.media-amazon.com/images/I/71UcbpPyPLL._AC_SX679_.jpg',6,2,'2025-03-05 13:31:29','2025-03-05 13:31:29'),(19,'EVGA GeForce RTX 3080 Ti','EVGA GeForce RTX 3080 Ti FTW3 Ultra Gaming, 12G-P5-3967-KR, 12GB GDDR6X, iCX3 Technology, ARGB LED, Metal Backplate (Renewed)',824.99,13,'https://m.media-amazon.com/images/I/81cAdtqu-6L._AC_SX466_.jpg',6,2,'2025-03-05 13:31:29','2025-03-05 13:31:29'),(20,'ASUS Dual NVIDIA GeForce RTX 3050 6GB','ASUS Dual NVIDIA GeForce RTX 3050 6GB OC Edition Gaming Graphics Card - PCIe 4.0, 6GB GDDR6 Memory, HDMI 2.1, DisplayPort 1.4a, 2-Slot Design, Axial-tech Fan Design, 0dB Technology, Steel Bracket',219.99,22,'https://m.media-amazon.com/images/I/81mwcITtHBL._AC_SX466_.jpg',6,2,'2025-03-05 13:31:29','2025-03-05 13:31:29'),(21,'KeiBn Upgraded Gaming Laptop Cooler Pad','KeiBn Upgraded Gaming Laptop Cooler Pad with 9 Quiet RGB Fans, Cooling Pad for 15.6-17.3 Inch Laptops with 7 Height Stands, 2 USB Ports, Phone Stand-Blue',30.99,12,'https://m.media-amazon.com/images/I/71QN5UjfFRL._AC_SX466_.jpg',6,2,'2025-03-05 13:31:29','2025-03-05 13:31:29'),(22,'IETS Supercharged Laptop Cooling pad','IETS Supercharged Laptop Cooling pad with Continuously Variable Speed turbofan,Seal Foam for Rapid Cooling 13-19inch Gaming Laptop,Air Filtration,RGB and USB Hub,Powerful Laptop Cooler',44.99,2,'https://m.media-amazon.com/images/I/71mNXFjWXtL._AC_SX466_.jpg',6,2,'2025-03-05 13:31:29','2025-03-05 13:31:29'),(23,'Garmin vívoactive 5','Garmin vívoactive 5, Health and Fitness GPS Smartwatch, AMOLED Display, Up to 11 Days of Battery, Black',249.99,3,'https://m.media-amazon.com/images/I/61A4yOWzGBL._AC_SX679_.jpg',3,2,'2025-03-05 13:31:29','2025-03-05 13:31:29'),(24,'Apple iPhone 15 Pro Max','Apple iPhone 15 Pro Max, 256GB, Black Titanium - AT&T',619.99,8,'https://m.media-amazon.com/images/I/81UKVHM77GL._AC_SX679_.jpg',1,3,'2025-03-05 13:31:29','2025-03-05 13:31:29'),(25,'Samsung Galaxy S23 Ultra 5G SM-S918B/DS','Samsung Galaxy S23 Ultra 5G SM-S918B/DS 256GB 12GB RAM, 200 MP Camera, Factory Unlocked, International Model (Phantom Black)',749.99,10,'https://m.media-amazon.com/images/I/71iBKcLHXFL._AC_SX679_.jpg',1,3,'2025-03-05 13:31:29','2025-03-05 13:31:29');
-UNLOCK TABLES;
-
-
-LOCK TABLES `reviews` WRITE;
-INSERT INTO `reviews` VALUES (1,1,4,5,'Amazing gaming GPU','2025-03-05 13:37:45'),(2,1,5,5,'This GPU delivers outstanding performance for gaming and AI tasks','2025-03-05 13:37:46'),(3,1,6,1,'I like this GPU very much but i do not have money','2025-03-05 13:37:46'),(4,24,5,1,'I hate Iphone, Apple','2025-03-05 13:37:46'),(5,24,4,3,'Same as Iphone 14','2025-03-05 13:37:46');
-UNLOCK TABLES;
-
-
-LOCK TABLES `users` WRITE;
-INSERT INTO `users` VALUES (1,'admin','group11@gmail.com','admin','admin','2025-03-05 12:44:00','2025-03-05 12:44:00'),(2,'dodevice','dodevice@gmail.com','dodevice','user','2025-03-05 12:44:00','2025-03-05 12:44:00'),(3,'thanhlam','thanhlam@gmail.com','thanhlam','user','2025-03-05 12:44:00','2025-03-05 12:44:00'),(4,'thanhhung','thanhhung@gmail.com','thanhhung','user','2025-03-05 12:44:00','2025-03-05 12:44:00'),(5,'duonglong','duonglong@gmail.com','duonglong','user','2025-03-05 12:44:00','2025-03-05 12:44:00'),(6,'ngohieu','ngohieu@gmail.com','ngohieu','user','2025-03-05 12:44:00','2025-03-05 12:44:00');
-UNLOCK TABLES;
+CREATE TABLE wishlist (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    product_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+);
