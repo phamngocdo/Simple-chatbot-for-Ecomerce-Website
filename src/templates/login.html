@@ -1,317 +1,66 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng nhập hệ thống</title>
-    <style>
-        :root {
-            --primary-color: #3a86ff;
-            --secondary-color: #8338ec;
-            --dark-bg: #121212;
-            --dark-surface: #1e1e1e;
-            --dark-text: #e0e0e0;
-            --dark-text-secondary: #a0a0a0;
-            --error-color: #ff5a5f;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--dark-bg);
-            color: var(--dark-text);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        header {
-            background-color: var(--dark-surface);
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        .nav-links a {
-            color: var(--dark-text-secondary);
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: var(--primary-color);
-        }
-
-        main {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem;
-        }
-
-        .login-container {
-            background-color: var(--dark-surface);
-            border-radius: 10px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            padding: 2.5rem;
-            width: 100%;
-            max-width: 450px;
-            animation: fadeIn 0.5s ease-in-out;
-        }
-
-        .login-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .login-header h1 {
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .login-header p {
-            color: var(--dark-text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            background-color: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            color: var(--dark-text);
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-        }
-
-        .remember-forgot {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            font-size: 0.9rem;
-        }
-
-        .remember-me {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .remember-me input {
-            accent-color: var(--primary-color);
-        }
-
-        .forgot-password a {
-            color: var(--dark-text-secondary);
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .forgot-password a:hover {
-            color: var(--primary-color);
-        }
-
-        .login-button {
-            width: 100%;
-            padding: 0.8rem;
-            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .login-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(58, 134, 255, 0.3);
-        }
-
-        .login-footer {
-            text-align: center;
-            margin-top: 1.5rem;
-            font-size: 0.9rem;
-            color: var(--dark-text-secondary);
-        }
-
-        .login-footer a {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        footer {
-            background-color: var(--dark-surface);
-            padding: 1.5rem 2rem;
-            text-align: center;
-            color: var(--dark-text-secondary);
-            font-size: 0.9rem;
-            margin-top: auto;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .footer-links a {
-            color: var(--dark-text-secondary);
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .footer-links a:hover {
-            color: var(--primary-color);
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                gap: 1rem;
-                padding: 1rem;
-            }
-
-            .nav-links {
-                gap: 1rem;
-            }
-
-            .login-container {
-                padding: 1.5rem;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='css/login.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
+
 <body>
-    <header>
-        <div class="logo">ChatBotAI</div>
-        <nav class="nav-links">
-            <a href="#">Trang chủ</a>
-            <a href="#">Giới thiệu</a>
-            <a href="#">Liên hệ</a>
-            <a href="#">Hỗ trợ</a>
-        </nav>
-    </header>
+  <header>{% include 'partials/header.html' %}</header>
 
-    <main>
-        <div class="login-container">
-            <div class="login-header">
-                <h1>Đăng nhập</h1>
-                <p>Vui lòng nhập thông tin đăng nhập để tiếp tục</p>
-            </div>
-
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="username">Tên đăng nhập</label>
-                    <input type="text" id="username" name="username" placeholder="Nhập tên đăng nhập" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="password">Mật khẩu</label>
-                    <input type="password" id="password" name="password" placeholder="Nhập mật khẩu" required>
-                </div>
-
-                <div class="remember-forgot">
-                    <div class="remember-me">
-                        <input type="checkbox" id="remember" name="remember">
-                        <label for="remember">Ghi nhớ đăng nhập</label>
-                    </div>
-                    <div class="forgot-password">
-                        <a href="#">Quên mật khẩu?</a>
-                    </div>
-                </div>
-
-                <button type="submit" class="login-button">Đăng nhập</button>
-            </form>
-
-            <div class="login-footer">
-                Chưa có tài khoản? <a href="#">Đăng ký ngay</a>
-            </div>
+  <main>
+    <div class="auth-container">
+      <div class="auth-card">
+        <div class="auth-header">
+          <h1>Login</h1>
         </div>
-    </main>
 
-    <footer>
-        <div class="footer-links">
-            <a href="#">Điều khoản sử dụng</a>
-            <a href="#">Chính sách bảo mật</a>
-            <a href="#">FAQ</a>
-            <a href="#">Về chúng tôi</a>
-        </div>
-        <p>© 2023 ChatBotAI. Bản quyền thuộc về Công ty TNHH ChatBotAI Việt Nam.</p>
-    </footer>
+        <form class="auth-form" id="loginForm">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            <i class="fas fa-envelope input-icon"></i>
+          </div>
 
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const remember = document.getElementById('remember').checked;
-            
-            // Xử lý đăng nhập ở đây (có thể gọi API)
-            console.log('Đăng nhập với:', { username, password, remember });
-            
-            // Hiển thị thông báo (tạm thời)
-            alert(`Xin chào ${username}! Chức năng đăng nhập đang được phát triển.`);
-        });
-    </script>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            <i class="fas fa-lock input-icon"></i>
+          </div>
+
+          <div class="form-options">
+            <div class="remember-me">
+              <input type="checkbox" id="remember" name="remember">
+              <label for="remember">Remember me</label>
+            </div>
+            <a href="/forgot-password" class="forgot-password">Forgot password?</a>
+          </div>
+
+          <button type="submit" class="auth-btn primary-btn">Login</button>
+
+          <div class="divider">
+            <span>or</span>
+          </div>
+
+          <button type="button" class="auth-btn google-btn">
+            <i class="fab fa-google"></i> Login with Google
+          </button>
+
+          <div class="auth-footer">
+            Don't have an account? <a href="/auth/register">Sign up now</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer>{% include 'partials/footer.html' %}</footer>
+
 </body>
+
 </html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='css/home.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+
+</head>
+
+<body>
+  <header>{% include 'partials/header.html' %}</header>
+
+  <main>
+    <section class="hero">
+      <h1>Welcome to UETStore Chatbot</h1>
+      <p>Shop smarter with UETStore’s AI chatbot — instant help, smart suggestions, and 24/7 support at your fingertips.
+      </p>
+      <a href="/auth/login" class="btn cta-button">Start Chat Now</a>
+    </section>
+  </main>
+
+
+  <footer>{% include 'partials/footer.html' %}</footer>
+</body>
+
+</html>

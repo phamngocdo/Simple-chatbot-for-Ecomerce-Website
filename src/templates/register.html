@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='css/register.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+  <header>{% include 'partials/header.html' %}</header>
+
+  <main>
+    <div class="auth-container">
+      <div class="auth-card">
+        <div class="auth-header">
+          <h1>Create Account</h1>
+        </div>
+
+        <form class="auth-form" id="registerForm">
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            <i class="fas fa-envelope input-icon"></i>
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+            <i class="fas fa-phone input-icon"></i>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Create a password" required>
+            <i class="fas fa-lock input-icon"></i>
+            <div class="password-hint">
+              <span>Must be at least 8 characters</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="confirm-password">Confirm Password</label>
+            <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password"
+              required>
+            <i class="fas fa-lock input-icon"></i>
+          </div>
+
+          <button type="submit" class="auth-btn primary-btn">Create Account</button>
+
+          <div class="divider">
+            <span>or</span>
+          </div>
+          <button type="button" class="auth-btn google-btn">
+            <i class="fab fa-google"></i> Sign Up with Google
+          </button>
+
+          <div class="auth-footer">
+            Already have an account? <a href="/auth/login">Sign in</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer>{% include 'partials/footer.html' %}</footer>
+</body>
+
+</html>

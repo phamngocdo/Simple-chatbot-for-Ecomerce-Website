@@ -1,9 +1,8 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from services.products_services import ProductService
 from config.db_config import get_mysql_db as get_db
-from utils.logger import log_error
 
 products_router = APIRouter()
 

@@ -2,7 +2,6 @@ from fastapi import HTTPException
 
 from sqlalchemy.orm import Session
 from models.users_model import UserModel
-from utils.logger import log_error
 
 class UserService():
     @staticmethod
@@ -15,7 +14,6 @@ class UserService():
                 raise HTTPException(status_code=404, detail="User not found")
             return user
         except Exception as e:
-            log_error(f"Error fetching user by ID: {e}")
             raise HTTPException(status_code=500, detail="Internal server error")
     
     @staticmethod
@@ -27,7 +25,6 @@ class UserService():
             db.refresh(new_user)
             return new_user
         except Exception as e:
-            log_error(f"Error creating user: {e}")
             raise HTTPException(status_code=500, detail="Internal server error")
     
     @staticmethod
@@ -44,5 +41,4 @@ class UserService():
             db.refresh(user)
             return user
         except Exception as e:
-            log_error(f"Error updating user: {e}")
             raise HTTPException(status_code=500, detail="Internal server error")

@@ -2,7 +2,6 @@ from sqlalchemy.orm import Session
 from models.products_model import ProductModel
 from models.users_model import UserModel
 from fastapi import HTTPException
-from utils.logger import log_error
 
 class ProductService():
     @staticmethod
@@ -27,7 +26,6 @@ class ProductService():
                 "updated_at": product.updated_at
             }
         except Exception as e:
-            log_error(f"Error fetching product by ID: {e}")
             raise HTTPException(status_code=500, detail="Internal server error")
     
     @staticmethod
@@ -51,5 +49,4 @@ class ProductService():
                 } for product in products
             ]
         except Exception as e:
-            log_error(f"Error fetching all products: {e}")
             raise HTTPException(status_code=500, detail="Internal server error")
