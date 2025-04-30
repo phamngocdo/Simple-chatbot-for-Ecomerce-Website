@@ -8,10 +8,19 @@
   <link rel="stylesheet" href="{{ url_for('static', path='css/register.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 
 <body>
-  <header>{% include 'partials/header.html' %}</header>
+  <header>
+    <div class="header-container">
+      <a href="/" class="logo">UETStoreChat</a>
+      <div class="auth-buttons">
+        <a href="/auth/login" class="btn signin-btn">Sign In</a>
+        <a href="/auth/register" class="btn signup-btn">Sign Up</a>
+      </div>
+    </div>
+  </header>
 
   <main>
     <div class="auth-container">
@@ -20,7 +29,12 @@
           <h1>Create Account</h1>
         </div>
 
-        <form class="auth-form" id="registerForm">
+        <form class="auth-form" id="registerForm" method="post" action="/auth/register">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="username" id="username" name="username" placeholder="Enter your username" required>
+            <i class="fas fa-user input-icon"></i>
+          </div>
 
           <div class="form-group">
             <label for="email">Email</label>
@@ -67,7 +81,12 @@
     </div>
   </main>
 
-  <footer>{% include 'partials/footer.html' %}</footer>
+  <footer>
+    <p>© 2023 UETStoreChat. All rights reserved.</p>
+  </footer>
+
+  <script src="{{ url_for('static', path='js/register.js') }}"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </body>
 
 </html>

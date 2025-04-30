@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat | UETStoreChat</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', path='css/chat.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+  <header class="main-header">
+    <div class="header-container">
+      <a href="/" class="logo">
+        <span class="logo-gradient">UET</span>StoreChat
+      </a>
+
+      {% if user %}
+      <div class="user-section">
+        <div class="user-profile">
+          <div class="avatar">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <span class="welcome-msg">{{ user.username }}</span>
+        </div>
+        <form action="/auth/logout" method="post" style="display: inline;">
+          <button type="submit" class="icon-btn logout-btn" title="Logout"
+            style="background: none; border: none; cursor: pointer;">
+            <i class="fas fa-sign-out-alt"></i>
+          </button>
+        </form>
+      </div>
+      {% else %}
+      <div class="auth-buttons">
+        <a href="/auth/login" class="btn signin-btn">Sign In</a>
+        <a href="/auth/register" class="btn signup-btn">Sign Up</a>
+      </div>
+      {% endif %}
+    </div>
+  </header>
+
+  <div class="chat-container">
+    <div class="conversation-list">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="Search conversations...">
+      </div>
+
+      <div class="conversation-item active">
+        <div class="avatar">
+          <i class="fas fa-robot"></i>
+        </div>
+        <div class="conversation-info">
+          <div class="conversation-name">UET Assistant</div>
+          <div class="last-message">How can I help you today?</div>
+        </div>
+        <div class="time">10:30 AM</div>
+      </div>
+
+      <div class="conversation-item">
+        <div class="avatar">
+          <i class="fas fa-user-friends"></i>
+        </div>
+        <div class="conversation-info">
+          <div class="conversation-name">Study Group</div>
+          <div class="last-message">Alice: Let's meet tomorrow</div>
+        </div>
+        <div class="time">Yesterday</div>
+      </div>
+
+    </div>
+
+    <div class="chat-area">
+      <div class="chat-header">
+        <div class="chat-partner">
+          <div class="avatar">
+            <i class="fas fa-robot"></i>
+          </div>
+          <span>UET Assistant</span>
+        </div>
+      </div>
+
+      <div class="messages-container">
+        <div class="message received">
+          <div class="avatar">
+            <i class="fas fa-robot"></i>
+          </div>
+          <div class="message-content">
+            <div class="message-text">Hello! How can I help you today?</div>
+            <div class="message-time">10:30 AM</div>
+          </div>
+        </div>
+
+        <div class="message sent">
+          <div class="message-content">
+            <div class="message-text">I need help with my registration</div>
+            <div class="message-time">10:32 AM</div>
+          </div>
+        </div>
+
+        <!-- More messages... -->
+      </div>
+
+      <div class="message-input">
+        <input type="text" placeholder="Type your message...">
+        <button class="send-btn">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2023 UETStoreChat. All rights reserved.</p>
+  </footer>
+</body>
+
+</html>

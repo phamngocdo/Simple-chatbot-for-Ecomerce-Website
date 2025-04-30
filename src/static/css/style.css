@@ -113,6 +113,129 @@ footer {
     box-shadow: 0 5px 15px rgba(58, 134, 255, 0.3);
 }
 
+.auth-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.signin-btn {
+    background-color: rgba(58, 134, 255, 0.15);
+    color: #a7c7ff;
+    border: 2px solid rgba(58, 134, 255, 0.5);
+    border-radius: 50px;
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    backdrop-filter: blur(4px);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.signin-btn:hover {
+    background-color: rgba(58, 134, 255, 0.3);
+    color: white;
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(58, 134, 255, 0.3),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.signin-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.4);
+}
+
+.signup-btn {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.signup-btn:hover {
+    background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(131, 56, 236, 0.4);
+}
+
+.icon-btn {
+    color: var(--dark-text-secondary);
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    padding: 0.5rem;
+}
+
+.icon-btn:hover {
+    color: var(--primary-color);
+    transform: scale(1.1);
+}
+
+.icon-btn.logout-btn {
+    color: var(--error-color);
+    font-size: 1.2rem;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.icon-btn.logout-btn:hover {
+    transform: scale(1.1);
+    color: rgba(255, 90, 95, 0.8);
+}
+
+.user-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background-color: var(--dark-surface);
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    cursor: pointer;
+}
+
+.welcome-msg {
+    font-weight: 500;
+    color: var(--dark-text-secondary);
+    font-size: 1rem;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+    font-size: 1.8rem;
+    border-radius: 50%;
+    background-color: rgba(58, 134, 255, 0.1);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+
+@keyframes slide-in {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
 @keyframes gradientShift {
     0% {
         background-position: 0% 50%;

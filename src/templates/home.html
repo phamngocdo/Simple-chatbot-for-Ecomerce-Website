@@ -7,23 +7,59 @@
   <title>Home</title>
   <link rel="stylesheet" href="{{ url_for('static', path='css/home.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 </head>
 
 <body>
-  <header>{% include 'partials/header.html' %}</header>
+  <header class="main-header">
+    <div class="header-container">
+      <a href="/" class="logo">
+        <span class="logo-gradient">UET</span>StoreChat
+      </a>
+
+      {% if user %}
+      <div class="user-section">
+        <div class="user-profile">
+          <div class="avatar">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <span class="welcome-msg">{{ user.username }}</span>
+        </div>
+        <form action="/auth/logout" method="post" style="display: inline;">
+          <button type="submit" class="icon-btn logout-btn" title="Logout"
+            style="background: none; border: none; cursor: pointer;">
+            <i class="fas fa-sign-out-alt"></i>
+          </button>
+        </form>
+      </div>
+      {% else %}
+      <div class="auth-buttons">
+        <a href="/auth/login" class="btn signin-btn">Sign In</a>
+        <a href="/auth/register" class="btn signup-btn">Sign Up</a>
+      </div>
+    </div>
+    {% endif %}
+    </div>
+  </header>
 
   <main>
     <section class="hero">
       <h1>Welcome to UETStore Chatbot</h1>
       <p>Shop smarter with UETStore’s AI chatbot — instant help, smart suggestions, and 24/7 support at your fingertips.
       </p>
+      {% if user %}
+      <a href="/chat" class="btn cta-button">Start Chat Now</a>
+      {% else %}
       <a href="/auth/login" class="btn cta-button">Start Chat Now</a>
+      {% endif %}
     </section>
   </main>
 
 
-  <footer>{% include 'partials/footer.html' %}</footer>
+  <footer>
+    <p>© 2023 UETStoreChat. All rights reserved.</p>
+  </footer>
 </body>
 
 </html>

@@ -5,14 +5,12 @@ from fastapi import HTTPException
 
 class ProductService():
     @staticmethod
-    async def get_product_by_id(db: Session, product_id: int):
-        if product_id <= 0:
-            raise HTTPException(status_code=400, detail="Invalid product_id, must be greater than 0")
+    async def get_product_by_id(product_id: int, db: Session):
         try:
             product = db.query(ProductModel).filter(ProductModel.id == product_id).join(ProductModel.category).join(ProductModel.seller).first()
             
             if not product:
-                raise HTTPException(status_code=404, detail="Product not found")
+                return None
             
             return {
                 "id": product.id,
@@ -26,14 +24,15 @@ class ProductService():
                 "updated_at": product.updated_at
             }
         except Exception as e:
-            raise HTTPException(status_code=500, detail="Internal server error")
+            print(e)
+            raise
     
     @staticmethod
     async def  get_all_products(db: Session):
         try:
             products = db.query(ProductModel).join(ProductModel.category).join(ProductModel.seller).all()
             if not products:
-                raise HTTPException(status_code=404, detail="No products found")
+                None
             
             return [
                 {
@@ -49,4 +48,5 @@ class ProductService():
                 } for product in products
             ]
         except Exception as e:
-            raise HTTPException(status_code=500, detail="Internal server error")
+            print(e)
+            raise

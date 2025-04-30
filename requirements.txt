@@ -9,4 +9,8 @@ Markdown
 authlib
 gpt4all=2.8.2
 pymongo=4.11.3
-'passlib[bcrypt]'
+passlib==1.7.4
+bcrypt==3.2.2
+PyJWT
+Authlib==1.5.2
+itsdangerous==2.2.0
