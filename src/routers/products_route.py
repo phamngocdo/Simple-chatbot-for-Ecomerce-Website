@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from services.products_services import ProductService
+from services.products_service import ProductService
 from config.db_config import get_mysql_db as get_db
 
 products_router = APIRouter()
@@ -15,6 +15,7 @@ async def get_all_products(db: Session = Depends(get_db)):
         return products
     except Exception as e:
         raise HTTPException(status_code=500, detail="Internal server error")
+    
 
 @products_router.get("/{product_id}")
 async def get_product(product_id: int, db: Session = Depends(get_db)):

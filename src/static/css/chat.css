@@ -40,6 +40,77 @@
     color: var(--dark-text);
 }
 
+.new-chat-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.new-chat-btn i {
+    margin-right: 5px;
+}
+
+.new-chat-btn:hover {
+    background-color: var(--secondary-color);
+}
+
+.conversation-actions {
+    position: relative;
+}
+
+.conversation-actions i {
+    font-size: 16px;
+    color: var(--dark-text-secondary);
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.conversation-actions:hover i {
+    color: var(--dark-text);
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 20px;
+    right: 0;
+    background-color: var(--dark-surface);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+.dropdown-menu button {
+    display: block;
+    width: 100%;
+    padding: 8px 10px;
+    background: none;
+    border: none;
+    text-align: left;
+    font-size: 14px;
+    color: var(--dark-text);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.dropdown-menu button:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.conversation-actions:hover .dropdown-menu {
+    display: block;
+}
+
 .conversation-item {
     padding: 15px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -55,6 +126,7 @@
 
 .conversation-item.active {
     background-color: rgba(58, 134, 255, 0.2);
+    border: 1px solid var(--primary-color);
 }
 
 .conversation-item .avatar {
@@ -159,6 +231,7 @@
     padding: 12px 15px;
     border-radius: 18px;
     position: relative;
+    word-wrap: break-word;
 }
 
 .message.received .message-content {

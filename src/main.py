@@ -10,18 +10,18 @@ from fastapi.responses import HTMLResponse
 
 from starlette.middleware.sessions import SessionMiddleware
 
-from routers.users import users_router
-from routers.products import products_router
-from routers.reviews import reviews_router
-from routers.chat import chat_router
-from routers.auth import auth_router
-from routers.web import web_router
+from routers.users_route import users_router
+from routers.products_route import products_router
+from routers.reviews_route import reviews_router
+from routers.chat_route import chat_router
+from routers.auth_route import auth_router
+from routers.web_route import web_router
 
 from chat_model.llm_chatbot import LlmChatBot
 
 SRC_DIR = Path(__file__).resolve().parent
 
-load_dotenv()
+load_dotenv() 
 
 app = FastAPI()
 
@@ -47,6 +47,5 @@ def start():
     )
 
 if __name__ == "__main__":
-    chatbot = LlmChatBot()
     start()
 

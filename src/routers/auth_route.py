@@ -11,7 +11,7 @@ from authlib.jose import jwt
 import requests
 
 from config.db_config import get_mysql_db as get_db
-from services.auth_services import AuthService
+from services.auth_service import AuthService
 
 SRC_DIR = Path(__file__).resolve().parent.parent
 

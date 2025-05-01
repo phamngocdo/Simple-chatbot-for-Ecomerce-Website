@@ -1,7 +1,6 @@
+import traceback
 from sqlalchemy.orm import Session
 from models.products_model import ProductModel
-from models.users_model import UserModel
-from fastapi import HTTPException
 
 class ProductService():
     @staticmethod
@@ -24,7 +23,7 @@ class ProductService():
                 "updated_at": product.updated_at
             }
         except Exception as e:
-            print(e)
+            traceback.print_exc()
             raise
     
     @staticmethod
@@ -48,5 +47,5 @@ class ProductService():
                 } for product in products
             ]
         except Exception as e:
-            print(e)
+            traceback.print_exc()
             raise

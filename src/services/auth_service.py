@@ -1,5 +1,6 @@
 import string
 import secrets
+import traceback
 from sqlalchemy.orm import Session
 from config.db_config import Base
 from models.users_model import UserModel
@@ -31,7 +32,7 @@ class AuthService:
                 }
             }
         except Exception as e:
-            print(e)
+            traceback.print_exc()
             raise
 
     @staticmethod
@@ -58,7 +59,7 @@ class AuthService:
                 }
             }
         except Exception as e:
-            print(e)
+            traceback.print_exc()
             raise
 
     @staticmethod
@@ -90,6 +91,6 @@ class AuthService:
             db.refresh(new_user)
             
         except Exception as e:
-            print(e)
+            traceback.print_exc()
             raise 
 

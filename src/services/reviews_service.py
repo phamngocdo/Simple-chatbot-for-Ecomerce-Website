@@ -1,5 +1,5 @@
+import traceback
 from sqlalchemy.orm import Session
-from fastapi import HTTPException
 from models.reviews_model import ReviewModel
 
 class ReviewService():
@@ -9,7 +9,7 @@ class ReviewService():
             review = db.query(ReviewModel).filter(ReviewModel.id == review_id).first()
             return review if review else None
         except Exception as e:
-            print(e)
+            traceback.print_exc()
             raise 
     
     @staticmethod
@@ -18,5 +18,5 @@ class ReviewService():
             reviews = db.query(ReviewModel).filter(ReviewModel.product_id == product_id).all()
             return reviews if reviews else None
         except Exception as e:
-            print(e)
+            traceback.print_exc()
             raise 

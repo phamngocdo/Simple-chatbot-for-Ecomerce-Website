@@ -1,5 +1,4 @@
-from fastapi import HTTPException
-
+import traceback
 from sqlalchemy.orm import Session
 from models.users_model import UserModel
 from utils.security import decode_token
@@ -10,7 +9,7 @@ class UserService():
         try:
             return db.query(UserModel).filter(UserModel.id == user_id).first()
         except Exception as e:
-            print(e)
+            traceback.print_exc()
             raise 
     
     @staticmethod
@@ -18,7 +17,7 @@ class UserService():
         try:
             return db.query(UserModel).filter(UserModel.email == email).first()
         except Exception as e:
-            print(e)
+            traceback.print_exc()
             raise 
     
     @staticmethod
@@ -28,7 +27,7 @@ class UserService():
             print(user_id)
             return db.query(UserModel).filter(UserModel.id == user_id).first()
         except Exception as e:
-            print(e)
+            traceback.print_exc()
             raise
     
     @staticmethod
@@ -43,5 +42,5 @@ class UserService():
             db.refresh(user)
             return user
         except Exception as e:
-            print(e)
+            traceback.print_exc()
             raise

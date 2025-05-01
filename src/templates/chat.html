@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chat | UETStoreChat</title>
+  <link rel="icon" href="{{ url_for('static', path='images/uet-logo.png') }}" type="image/x-icon">
   <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', path='css/chat.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -43,10 +44,9 @@
 
   <div class="chat-container">
     <div class="conversation-list">
-      <div class="search-box">
-        <i class="fas fa-search"></i>
-        <input type="text" placeholder="Search conversations...">
-      </div>
+      <button class="new-chat-btn">
+        <i class="fas fa-plus"></i> New Chat
+      </button>
 
       <div class="conversation-item active">
         <div class="avatar">
@@ -55,6 +55,13 @@
         <div class="conversation-info">
           <div class="conversation-name">UET Assistant</div>
           <div class="last-message">How can I help you today?</div>
+        </div>
+        <div class="conversation-actions">
+          <i class="fas fa-ellipsis-v"></i>
+          <div class="dropdown-menu">
+            <button class="rename-btn">Rename</button>
+            <button class="delete-btn">Delete</button>
+          </div>
         </div>
         <div class="time">10:30 AM</div>
       </div>
@@ -66,6 +73,13 @@
         <div class="conversation-info">
           <div class="conversation-name">Study Group</div>
           <div class="last-message">Alice: Let's meet tomorrow</div>
+        </div>
+        <div class="conversation-actions">
+          <i class="fas fa-ellipsis-v"></i>
+          <div class="dropdown-menu">
+            <button class="rename-btn">Rename</button>
+            <button class="delete-btn">Delete</button>
+          </div>
         </div>
         <div class="time">Yesterday</div>
       </div>
@@ -100,7 +114,6 @@
           </div>
         </div>
 
-        <!-- More messages... -->
       </div>
 
       <div class="message-input">

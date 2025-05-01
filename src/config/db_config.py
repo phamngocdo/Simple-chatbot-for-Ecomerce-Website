@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from pymongo import MongoClient
+from motor.motor_asyncio import AsyncIOMotorClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
@@ -29,9 +29,9 @@ def get_mysql_db():
 
 # ================= MongoDB Config =================
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
-MONGO_DB_NAME = os.getenv("MONGO_DB_NAME", "myMongoDB")
+MONGO_DB_NAME = os.getenv("MONGO_DB_NAME", "chat_messages")
 
-mongo_client = MongoClient(MONGO_URI)
+mongo_client = AsyncIOMotorClient(MONGO_URI)
 mongo_db = mongo_client[MONGO_DB_NAME]
 
 def get_mongo_db():

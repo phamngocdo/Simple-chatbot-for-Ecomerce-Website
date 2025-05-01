@@ -16,14 +16,14 @@ logging.basicConfig(
     ]
 )
 
-def log_info(message):
+def log_info(message: str):
     logging.info(message)
 
-def log_warning(message):
+def log_warning(message: str):
     logging.warning(message)
 
-def log_error(message):
+def log_error(message: str):
     logging.error(message, exc_info=True)
 
-def log_debug(message):
+def log_debug(message: str):
     logging.debug(message)
