@@ -31,6 +31,7 @@ class ChatService:
         except Exception as e:
             traceback.print_exc()
             raise
+
     
     @staticmethod
     async def get_messages_from_conversation(token: str, conversation_id: str) -> dict:
@@ -56,13 +57,13 @@ class ChatService:
             raise
 
 
-
     @staticmethod
     async def create_new_conversation(token: str, name):
         try:
             user_id = decode_token(token).get("sub")
+            conv_id = str(uuid4())
             new_conv = {
-                "id": str(uuid4()),
+                "id": conv_id,
                 "name": name,
                 "created_at": datetime.now(),
                 "updated_at": datetime.now(),
@@ -71,16 +72,54 @@ class ChatService:
             await db["chat_data"].update_one(
                 {"user_id": user_id},
                 {"$push": {"conversations" : new_conv}},
-                update=True
+                upsert=True
             )
+
+            return conv_id
         except Exception as e:
             traceback.print_exc()
             raise
 
-
     @staticmethod
-    async def save_chat_data(user_id: str, chat_data: dict) -> bool:
-        pass
+    async def save_chat_data(token: str, chat_data: dict) -> bool:
+        try:
+            conv_id = chat_data.get("id", None)
+            name = chat_data.get("name")
+            messages = chat_data.get("messages", [])
+            user_id = decode_token(token).get("sub")
+
+            if not conv_id:
+                conv_id = await ChatService.create_new_conversation(token, "New Conversation")
+
+            update_data = {}
+
+            if messages:
+                update_data["$push"] = {
+                    "conversations.$.messages": {
+                        "$each": messages
+                    }
+                }
+
+            update_data["$set"] = {
+                "conversations.$.updated_at": datetime.now()
+            }
+
+            if name:
+                update_data["$set"]["conversations.$.name"] = name
+
+            await db["chat_data"].update_one(
+                {
+                    "user_id": str(user_id),
+                    "conversations.id": conv_id
+                },
+                update_data
+            )
+
+            return True
+
+        except Exception as e:
+            traceback.print_exc()
+            raise
 
 
     @staticmethod
