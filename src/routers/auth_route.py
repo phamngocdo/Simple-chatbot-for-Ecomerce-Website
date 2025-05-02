@@ -48,7 +48,13 @@ async def login(request: Request, login_data: AuthLogin, db: Session = Depends(g
         request.session["user"] = auth_result["user"]
 
         response = RedirectResponse(url="/chat", status_code=302)
-        response.set_cookie(key="access_token", value=auth_result["access_token"], httponly=True)
+        response.set_cookie(
+            key="access_token",
+            value=auth_result["access_token"],
+            httponly=True,
+            secure=True,  
+            samesite="Lax"
+        )
         return response
 
     except ValueError as e:

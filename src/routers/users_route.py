@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from services.users_service import UserService
 from schemas.user_schemas import UserUpdate
@@ -29,7 +30,8 @@ async def update_password(data: UserUpdate, token: str = Depends(oauth2_scheme),
         user_data = {
             "password": UserUpdate.password
         }
-        return await UserService.update_current_user(token=token, user_data=user_data, db=db)
+        await UserService.update_current_user(token=token, user_data=user_data, db=db)
+        return JSONResponse(status_code=200, content={"message": "Update password successfull"})
     except ValueError as e:
         raise HTTPException(status_code=401, detail=str(e))
     except Exception as e:

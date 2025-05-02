@@ -81,7 +81,7 @@ class ChatService:
             raise
 
     @staticmethod
-    async def save_chat_data(token: str, chat_data: dict) -> bool:
+    async def save_chat_data(token: str, chat_data: dict):
         try:
             conv_id = chat_data.get("id", None)
             name = chat_data.get("name")
@@ -115,8 +115,24 @@ class ChatService:
                 update_data
             )
 
-            return True
+        except Exception as e:
+            traceback.print_exc()
+            raise
 
+
+    @staticmethod
+    async def delete_conversation(token: str, conversation_id: str):
+        try:
+            user_id = decode_token(token).get("sub")
+
+            await db["chat_data"].update_one(
+                {"user_id": user_id},
+                {
+                    "$pull": {
+                        "conversations": {"id" :conversation_id}
+                    }
+                }
+            )
         except Exception as e:
             traceback.print_exc()
             raise

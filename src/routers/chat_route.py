@@ -67,3 +67,12 @@ async def update_conversations(conv: ConversationUpdate, token: str = Depends(oa
     except Exception as e:
         raise HTTPException(status_code=500, detail="Internal server error")
 
+
+@chat_router.delete("/conversations/{conversation_id}")
+async def delete_conversation(conversation_id: str, token: str = Depends(oauth2_scheme)):
+    try:
+        await ChatService.delete_conversation(token=token, conversation_id=conversation_id)
+        return JSONResponse(status_code=200, content={"message": "Delete conversation successfully"})
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Internal server error")
