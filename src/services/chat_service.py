@@ -1,12 +1,15 @@
 import traceback
-
+from uuid import uuid4
+from datetime import datetime
+from utils.security import decode_token
 from config.db_config import mongo_db as db
 
 class ChatService:
 
     @staticmethod
-    async def get_conversations_from_user(user_id: int) -> dict:
+    async def get_conversations(token: str) -> dict:
         try:
+            user_id = decode_token(token).get("sub")
             data = await db["chat_data"].find_one(
                 {"user_id": str(user_id)},
                 {
@@ -30,10 +33,15 @@ class ChatService:
             raise
     
     @staticmethod
-    async def get_messages_from_conversation(conversation_id: str) -> dict:
+    async def get_messages_from_conversation(token: str, conversation_id: str) -> dict:
         try:
+            user_id = decode_token(token).get("sub")
+
             data = await db["chat_data"].find_one(
-                {"conversations.id": conversation_id},
+                {
+                    "user_id": str(user_id),
+                    "conversations.id": conversation_id
+                },
                 {
                     "_id": 0,
                     "conversations.$": 1
@@ -44,37 +52,37 @@ class ChatService:
             else:
                 return {}
         except Exception as e:
-            print(e)
+            traceback.print_exc()
             raise
 
+
+
     @staticmethod
-    async def update_conversation(conversation_id: str, data: dict) -> bool:
+    async def create_new_conversation(token: str, name):
         try:
-            update_data = {}
-            if "name" in data:
-                update_data["conversations.$.name"] = data["name"]
-            if "messages" in data:
-                update_data["conversations.$.messages"] = data["messages"]
-            if "updated_at" in data:
-                update_data["conversations.$.updated_at"] = data["updated_at"]
-
-            if update_data:
-                result = await db["chat_data"].update_one(
-                    {"conversations.id": conversation_id},
-                    {"$set": update_data}
-                )
-                return result.modified_count > 0
-            else:
-                return False
+            user_id = decode_token(token).get("sub")
+            new_conv = {
+                "id": str(uuid4()),
+                "name": name,
+                "created_at": datetime.now(),
+                "updated_at": datetime.now(),
+                "messages": []
+            }
+            await db["chat_data"].update_one(
+                {"user_id": user_id},
+                {"$push": {"conversations" : new_conv}},
+                update=True
+            )
         except Exception as e:
-            print(e)
+            traceback.print_exc()
             raise
 
 
     @staticmethod
-    def save_chat_data(user_id: str, chat_data: dict) -> bool:
+    async def save_chat_data(user_id: str, chat_data: dict) -> bool:
         pass
 
+
     @staticmethod
-    def get_response(user_id: str, message: str) -> str:
+    async def get_response(user_id: str, message: str) -> str:
         pass

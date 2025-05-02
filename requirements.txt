@@ -8,10 +8,11 @@ unstructured
 Markdown
 authlib
 gpt4all=2.8.2
-motor
+pymongo
 passlib==1.7.4
 bcrypt==3.2.2
 PyJWT
 Authlib==1.5.2
 itsdangerous==2.2.0
+redis==6.0.0
 aiosmtplib==4.0.1

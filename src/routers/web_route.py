@@ -1,6 +1,6 @@
 from pathlib import Path
-from fastapi import APIRouter, Request, HTTPException
-from fastapi.responses import HTMLResponse
+from fastapi import APIRouter, Request
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 
 web_router = APIRouter()
@@ -19,4 +19,6 @@ async def root(request: Request):
 @web_router.get("/chat")
 def chat_page(request: Request):
     user = request.session.get("user")
+    if not user:
+        return RedirectResponse(url="/auth/login", status_code=302)
     return templates.TemplateResponse("chat.html", {"request": request, "user": user})

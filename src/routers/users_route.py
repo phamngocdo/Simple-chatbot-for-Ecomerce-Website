@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
-from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from services.users_service import UserService
+from schemas.user_schemas import UserUpdate
 
 from config.db_config import get_mysql_db as get_db
 
@@ -22,19 +22,15 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
         raise HTTPException(status_code=500, detail="Internal server error")
     
 
-class UserUpdate(BaseModel):
-    email: str
-    confirm_code: str
-    password: str
 
-@users_router.put("/{user_id}")
-async def update_user(user_id: int, data: UserUpdate, db: Session = Depends(get_db)):
-    if user_id <= 0:
-        raise HTTPException(status_code=400, detail="Invalid user_id, must be greater than 0")
+@users_router.put("/me")
+async def update_password(data: UserUpdate, token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     try:
-        user = await UserService.update_user(db=db, user_id=user_id, user_data=data)
-        if not user:
-            raise HTTPException(status_code=404, detail="User not found")
-        return user
+        user_data = {
+            "password": UserUpdate.password
+        }
+        return await UserService.update_current_user(token=token, user_data=user_data, db=db)
+    except ValueError as e:
+        raise HTTPException(status_code=401, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail="Internal server error")

@@ -3,10 +3,8 @@ import uvicorn
 from pathlib import Path
 from dotenv import load_dotenv
 
-from fastapi import FastAPI, Request
-from fastapi.templating import Jinja2Templates
+from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse
 
 from starlette.middleware.sessions import SessionMiddleware
 
@@ -16,8 +14,6 @@ from routers.reviews_route import reviews_router
 from routers.chat_route import chat_router
 from routers.auth_route import auth_router
 from routers.web_route import web_router
-
-from chat_model.llm_chatbot import LlmChatBot
 
 SRC_DIR = Path(__file__).resolve().parent
 

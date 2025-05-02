@@ -23,8 +23,15 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const response = await fetch("/auth/login", {
         method: "POST",
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
       });
+
 
       if (response.ok) {
         window.location.href = "/chat";

@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 
 from pathlib import Path
 from fastapi import APIRouter, Request, Depends, HTTPException,Form
-from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from authlib.integrations.starlette_client import OAuth
 from sqlalchemy.orm import Session
@@ -11,7 +11,8 @@ from authlib.jose import jwt
 import requests
 
 from config.db_config import get_mysql_db as get_db
-from services.auth_service import AuthService
+from services.auth_service import AuthService, VerificationCodeService, CodeAlreadySentException
+from schemas.auth_schemas import AuthLogin, AuthRegister
 
 SRC_DIR = Path(__file__).resolve().parent.parent
 
@@ -34,17 +35,13 @@ templates = Jinja2Templates(directory=SRC_DIR / "templates")
 
 auth_router = APIRouter()
 
+
 @auth_router.post("/login")
-async def login(
-    request: Request,
-    email: str = Form(...),
-    password: str = Form(...),
-    db: Session = Depends(get_db)
-):
+async def login(request: Request, login_data: AuthLogin, db: Session = Depends(get_db)):
     try:
         user_data = {
-            "email": email,
-            "password": password
+            "email": login_data.email,
+            "password": login_data.password
         }
         auth_result = await AuthService.login(db=db, user_data=user_data)
 
@@ -64,10 +61,12 @@ async def login(
 async def login_page(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
+
 @auth_router.get("/google")
 async def login_with_google(request: Request, db: Session = Depends(get_db)): 
     redirect_uri = request.url_for('login_with_google_callback')
     return await oauth.google.authorize_redirect(request, redirect_uri)
+
 
 @auth_router.get("/google/callback")
 async def login_with_google_callback(request: Request, db: Session = Depends(get_db)):
@@ -92,21 +91,16 @@ async def login_with_google_callback(request: Request, db: Session = Depends(get
 
     except Exception as e:
         raise HTTPException(status_code=500, detail="Internal Server Error")
+    
 
 @auth_router.post("/register")
-async def register(
-    username: str = Form(...),
-    email: str = Form(...),
-    phone: str = Form(...),
-    password: str = Form(...),
-    db: Session = Depends(get_db)
-):
+async def register(request: Request, register_data: AuthRegister, db: Session = Depends(get_db)):
     try:
         user_data = {
-            "username": username,
-            "email": email,
-            "phone": phone,
-            "password": password
+            "username": register_data.username,
+            "email": register_data.email,
+            "phone": register_data.phone,
+            "password": register_data.password
         }
         await AuthService.register(db=db, user_data=user_data)
 
@@ -121,6 +115,7 @@ async def register(
 async def register_page(request: Request):
     return templates.TemplateResponse("register.html", {"request": request})
 
+
 @auth_router.post("/logout")
 async def logout(request: Request):
     try:
@@ -134,4 +129,14 @@ async def logout(request: Request):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail="Internal Server Error")
+    
 
+@auth_router.post("/verify-code")
+async def send_verify_code(email: str):
+    try:
+        await VerificationCodeService.send_code(email=email)
+        return JSONResponse(status_code=200, content={"message: Send verify code successful"})
+    except CodeAlreadySentException as e:
+        raise HTTPException(status_code=429, detail=e.detail)
+    except Exception:
+        raise HTTPException(status_code=500, detail="Internal server error")

@@ -1,10 +1,19 @@
 import string
 import secrets
 import traceback
+import random
 from sqlalchemy.orm import Session
 from config.db_config import Base
+from config.redis_config import redis_client
 from models.users_model import UserModel
-from utils.security import hash_password, verify_password, create_access_token, decode_token
+from utils.security import hash_password, verify_password, create_access_token
+from utils.gmail_sender import send_email_verification_code
+
+class AuthService:
+    pass
+
+class VerificationCodeService:
+    pass
 
 class AuthService:
     @staticmethod
@@ -93,4 +102,30 @@ class AuthService:
         except Exception as e:
             traceback.print_exc()
             raise 
+
+class CodeAlreadySentException(Exception):
+    def __init__(self, detail: str):
+        self.detail = detail
+
+class VerificationCodeService:
+    @staticmethod
+    async def send_code(email: str):
+        existing_code = await redis_client.get(f"verify: {email}")
+        if existing_code:
+            return CodeAlreadySentException(detail="Verification code already sent. Please wait before retrying.")
+        
+        characters = string.ascii_letters + string.digits 
+        code = ''.join(random.choices(characters, k=6))
+        await redis_client.set(f"verify:{email}", code, ex=120)
+        await send_email_verification_code(to_email=email, verification_code=code)
+
+
+    @staticmethod
+    async def verify_code(email: str, code: str) -> bool:
+        stored_code = await redis_client.get(f"verify:{email}")
+        return stored_code == code
+
+    @staticmethod
+    async def delete_code(email: str):
+        await redis_client.delete(f"verify:{email}")
 
