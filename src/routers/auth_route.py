@@ -46,6 +46,7 @@ async def login(request: Request, login_data: AuthLogin, db: Session = Depends(g
         auth_result = await AuthService.login(db=db, user_data=user_data)
 
         request.session["user"] = auth_result["user"]
+        request.session["access_token"] = auth_result["access_token"]
 
         response = RedirectResponse(url="/chat", status_code=302)
         response.set_cookie(
@@ -53,7 +54,8 @@ async def login(request: Request, login_data: AuthLogin, db: Session = Depends(g
             value=auth_result["access_token"],
             httponly=True,
             secure=True,  
-            samesite="Lax"
+            samesite="Lax",
+            max_age=86400 * 7
         )
         return response
 
@@ -65,11 +67,17 @@ async def login(request: Request, login_data: AuthLogin, db: Session = Depends(g
 
 @auth_router.get("/login", response_class=HTMLResponse)
 async def login_page(request: Request):
+    token = request.cookies.get("access_token")
+    if token:
+        return RedirectResponse(url="/", status_code=302)
     return templates.TemplateResponse("login.html", {"request": request})
 
 
 @auth_router.get("/google")
 async def login_with_google(request: Request, db: Session = Depends(get_db)): 
+    token = request.cookies.get("access_token")
+    if token:
+        return RedirectResponse(url="/", status_code=302)
     redirect_uri = request.url_for('login_with_google_callback')
     return await oauth.google.authorize_redirect(request, redirect_uri)
 
@@ -119,6 +127,9 @@ async def register(request: Request, register_data: AuthRegister, db: Session = 
 
 @auth_router.get("/register", response_class=HTMLResponse)
 async def register_page(request: Request):
+    token = request.cookies.get("access_token")
+    if token:
+        return RedirectResponse(url="/", status_code=302)
     return templates.TemplateResponse("register.html", {"request": request})
 
 
@@ -127,6 +138,9 @@ async def logout(request: Request):
     try:
         if "user" in request.session:
             del request.session["user"]
+        
+        if "access_token" in request.session:
+            del request.session["access_token"]
 
         response = RedirectResponse(url="/auth/login", status_code=302)
         response.delete_cookie(key="access_token", path="/", httponly=True)

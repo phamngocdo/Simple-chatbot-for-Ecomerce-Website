@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Request
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel
@@ -11,8 +11,11 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 @chat_router.get("/")
-async def get_conversation(token: str = Depends(oauth2_scheme)):
+async def get_conversation(request: Request):
     try:
+        token = request.session.get("access_token")
+        if not token:
+            raise HTTPException(status_code=401, detail="Unauthorized")
         conversation = await ChatService.get_conversations(token=token)
         return conversation
     except Exception as e:
@@ -20,8 +23,11 @@ async def get_conversation(token: str = Depends(oauth2_scheme)):
     
     
 @chat_router.get("/conversations/{conversation_id}")
-async def get_messages(conversation_id: str, token: str = Depends(oauth2_scheme)):
+async def get_messages(conversation_id: str, request: Request):
     try:
+        token = request.session.get("access_token")
+        if not token:
+            raise HTTPException(status_code=401, detail="Unauthorized")
         messages = await ChatService.get_messages_from_conversation(token=token, conversation_id=conversation_id)
         return messages
     except Exception as e:
@@ -29,13 +35,16 @@ async def get_messages(conversation_id: str, token: str = Depends(oauth2_scheme)
     
 
 @chat_router.post("/")
-async def get_response_from_chatbot(message: Message, token: str = Depends(oauth2_scheme)):
+async def get_response_from_chatbot(message: Message, request: Request):
     pass
     
 
 @chat_router.post("/conversations")
-async def create_new_conversation(conv: ConversationCreate, token: str = Depends(oauth2_scheme)):
+async def create_new_conversation(conv: ConversationCreate, request: Request):
     try:
+        token = request.session.get("access_token")
+        if not token:
+            raise HTTPException(status_code=401, detail="Unauthorized")
         name = conv.name
         await ChatService.create_new_conversation(token=token, name=name)
         return JSONResponse(status_code=200, content={"message": "Create new conversation successful"})
@@ -44,8 +53,12 @@ async def create_new_conversation(conv: ConversationCreate, token: str = Depends
 
 
 @chat_router.put("/conversations")
-async def update_conversations(conv: ConversationUpdate, token: str = Depends(oauth2_scheme)):
+async def update_conversations(conv: ConversationUpdate, request: Request):
     try:
+        token = request.session.get("access_token")
+        if not token:
+            raise HTTPException(status_code=401, detail="Unauthorized")
+        
         update_data = {}
 
         if conv.id:
@@ -69,8 +82,12 @@ async def update_conversations(conv: ConversationUpdate, token: str = Depends(oa
 
 
 @chat_router.delete("/conversations/{conversation_id}")
-async def delete_conversation(conversation_id: str, token: str = Depends(oauth2_scheme)):
+async def delete_conversation(conversation_id: str, request: Request):
     try:
+        token = request.session.get("access_token")
+        if not token:
+            raise HTTPException(status_code=401, detail="Unauthorized")
+
         await ChatService.delete_conversation(token=token, conversation_id=conversation_id)
         return JSONResponse(status_code=200, content={"message": "Delete conversation successfully"})
     
