@@ -19,6 +19,4 @@ async def root(request: Request):
 @web_router.get("/chat")
 async def chat_page(request: Request):
     user = request.session.get("user")
-    if not user:
-        return RedirectResponse(url="/auth/login", status_code=302)
     return templates.TemplateResponse("chat.html", {"request": request, "user": user})

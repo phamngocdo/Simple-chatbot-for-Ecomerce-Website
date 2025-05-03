@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
@@ -13,11 +13,14 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 @users_router.get("/me")
-async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+async def get_current_user(request: Request, db: Session = Depends(get_db)):
     try:
-        user = await UserService.get_current_user(token=token, db=db)
-        if not user:
+        token = request.session.get("access_token")
+        if not token:
             raise HTTPException(status_code=401, detail="Unauthorized")
+        
+        user = await UserService.get_current_user(token=token, db=db)
+
         return user
     except Exception as e:
         raise HTTPException(status_code=500, detail="Internal server error")
@@ -25,10 +28,14 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
 
 
 @users_router.put("/me")
-async def update_password(data: UserUpdate, token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+async def update_password(data: UserUpdate, request: Request, db: Session = Depends(get_db)):
     try:
+        token = request.session.get("access_token")
+        if not token:
+            raise HTTPException(status_code=401, detail="Unauthorized")
+
         user_data = {
-            "password": UserUpdate.password
+            "password": data.password
         }
         await UserService.update_current_user(token=token, user_data=user_data, db=db)
         return JSONResponse(status_code=200, content={"message": "Update password successfull"})

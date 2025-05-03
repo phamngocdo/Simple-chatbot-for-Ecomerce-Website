@@ -4,7 +4,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (localStorage.getItem("rememberMe") === "true") {
     document.getElementById("email").value = localStorage.getItem("email") || "";
-    document.getElementById("password").value = localStorage.getItem("password") || "";
+    const encryptedPassword = localStorage.getItem("password");
+    if (encryptedPassword) {
+      document.getElementById("password").value = atob(encryptedPassword);
+    }
     rememberMeCheckbox.checked = true;
   }
 
@@ -32,19 +35,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }),
       });
 
-
       if (response.ok) {
-        window.location.href = "/chat";
-
-        if (rememberMeCheckbox.checked) {
-          localStorage.setItem("email", email);
-          localStorage.setItem("password", password);
-          localStorage.setItem("rememberMe", "true");
-        } else {
-          localStorage.removeItem("email");
-          localStorage.removeItem("password");
-          localStorage.removeItem("rememberMe");
-        }
+        window.location.href = "/";
       } else {
         const error = await response.json();
         alert(error.detail || "Login failed. Please check your credentials.");
