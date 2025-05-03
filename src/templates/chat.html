@@ -47,72 +47,11 @@
       <button class="new-chat-btn">
         <i class="fas fa-plus"></i> New Chat
       </button>
-
-      <div class="conversation-item active">
-        <div class="avatar">
-          <i class="fas fa-robot"></i>
-        </div>
-        <div class="conversation-info">
-          <div class="conversation-name">UET Assistant</div>
-          <div class="last-message">How can I help you today?</div>
-        </div>
-        <div class="conversation-actions">
-          <i class="fas fa-ellipsis-v"></i>
-          <div class="dropdown-menu">
-            <button class="rename-btn">Rename</button>
-            <button class="delete-btn">Delete</button>
-          </div>
-        </div>
-        <div class="time">10:30 AM</div>
-      </div>
-
-      <div class="conversation-item">
-        <div class="avatar">
-          <i class="fas fa-user-friends"></i>
-        </div>
-        <div class="conversation-info">
-          <div class="conversation-name">Study Group</div>
-          <div class="last-message">Alice: Let's meet tomorrow</div>
-        </div>
-        <div class="conversation-actions">
-          <i class="fas fa-ellipsis-v"></i>
-          <div class="dropdown-menu">
-            <button class="rename-btn">Rename</button>
-            <button class="delete-btn">Delete</button>
-          </div>
-        </div>
-        <div class="time">Yesterday</div>
-      </div>
-
     </div>
 
     <div class="chat-area">
-      <div class="chat-header">
-        <div class="chat-partner">
-          <div class="avatar">
-            <i class="fas fa-robot"></i>
-          </div>
-          <span>UET Assistant</span>
-        </div>
-      </div>
 
-      <div class="messages-container">
-        <div class="message received">
-          <div class="avatar">
-            <i class="fas fa-robot"></i>
-          </div>
-          <div class="message-content">
-            <div class="message-text">Hello! How can I help you today?</div>
-          </div>
-        </div>
-
-        <div class="message sent">
-          <div class="message-content">
-            <div class="message-text">I need help with my registration</div>
-          </div>
-        </div>
-
-      </div>
+      <div class="messages-container" id="messagesContainer"></div>
 
       <div class="message-input">
         <input type="text" placeholder="Type your message...">

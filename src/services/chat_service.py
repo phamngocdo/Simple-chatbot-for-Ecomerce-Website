@@ -45,7 +45,7 @@ class ChatService:
                 },
                 {
                     "_id": 0,
-                    "conversations.$": 1
+                    "conversations.messages": 1
                 }
             )
             if data and "conversations" in data:
