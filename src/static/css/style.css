@@ -223,6 +223,72 @@ footer {
     transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
+/* Thanh cuộn dọc */
+.conversation-list::-webkit-scrollbar,
+.messages-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+/* Thanh cuộn ngang */
+.conversation-list::-webkit-scrollbar:horizontal,
+.messages-container::-webkit-scrollbar:horizontal {
+    height: 8px;
+}
+
+/* Track (phần nền thanh cuộn) */
+.conversation-list::-webkit-scrollbar-track,
+.messages-container::-webkit-scrollbar-track {
+    background: #2d3748;
+    border-radius: 4px;
+}
+
+/* Handle (phần thanh cuộn có thể kéo) */
+.conversation-list::-webkit-scrollbar-thumb,
+.messages-container::-webkit-scrollbar-thumb {
+    background: #4a5568;
+    border-radius: 4px;
+}
+
+.conversation-list::-webkit-scrollbar-thumb:hover,
+.messages-container::-webkit-scrollbar-thumb:hover {
+    background: #718096;
+}
+
+.conversation-list::-webkit-scrollbar-corner,
+.messages-container::-webkit-scrollbar-corner {
+    background: #2d3748;
+}
+
+.conversation-list,
+.messages-container {
+    scrollbar-width: thin;
+    scrollbar-color: #4a5568 #2d3748;
+}
+
+body.dark {
+    background-color: #1a202c;
+    color: #e2e8f0;
+}
+
+body.dark .conversation-item {
+    background-color: #2d3748;
+    color: #e2e8f0;
+}
+
+body.dark .conversation-item.active {
+    background-color: #4a4d53;
+    border-left-color: #282a2c;
+}
+
+body.dark .message.received {
+    background-color: #2d3748;
+    color: #e2e8f0;
+}
+
+body.dark .message.sent {
+    background-color: #4299e1;
+    color: white;
+}
 
 @keyframes slide-in {
     from {

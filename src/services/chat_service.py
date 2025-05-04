@@ -48,13 +48,16 @@ class ChatService:
                 },
                 {
                     "_id": 0,
-                    "conversations.messages": 1
+                    "conversations": {
+                        "$elemMatch": {"id": conversation_id}
+                    }
                 }
             )
-            if data and "conversations" in data:
+
+            if data and "conversations" in data and len(data["conversations"]) > 0:
                 return data["conversations"][0]
-            else:
-                return {}
+            return {"messages": []} 
+            
         except (ExpiredSignatureError, InvalidTokenError) as e:
             raise
         except Exception as e:
@@ -121,6 +124,25 @@ class ChatService:
                 },
                 update_data
             )
+
+            updated_data = await db["chat_data"].find_one(
+                {
+                    "user_id": str(user_id),
+                    "conversations.id": conv_id
+                },
+                {
+                    "_id": 0,
+                    "user_id": 1,
+                    "conversations": {
+                        "$elemMatch": {
+                            "id": conv_id
+                        }
+                    }
+                }
+            )
+            if updated_data and "conversations" in updated_data:
+                return updated_data["conversations"][0]
+
         except (ExpiredSignatureError, InvalidTokenError) as e:
             raise
         except Exception as e:

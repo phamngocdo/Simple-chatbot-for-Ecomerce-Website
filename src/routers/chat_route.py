@@ -31,6 +31,8 @@ async def get_messages(conversation_id: str, request: Request):
         if not token:
             raise HTTPException(status_code=401, detail="Unauthorized")
         messages = await ChatService.get_messages_from_conversation(token=token, conversation_id=conversation_id)
+        if not messages:
+            raise HTTPException(status_code=404, detail="Conversation not found")
         return messages
     except (ExpiredSignatureError, InvalidTokenError) as e:
         raise HTTPException(status_code=401, detail="Unauthorized")
@@ -79,9 +81,8 @@ async def update_conversations(conv: ConversationUpdate, request: Request):
         if not update_data:
             raise HTTPException(status_code=400, detail="No valid data to update")
 
-        await ChatService.save_chat_data(token=token, chat_data=update_data)
-        
-        return JSONResponse(status_code=200, content={"message": "Conversation updated successfully"})
+        result = await ChatService.save_chat_data(token=token, chat_data=update_data)
+        return result
     except (ExpiredSignatureError, InvalidTokenError) as e:
         raise HTTPException(status_code=401, detail="Unauthorized")
 
