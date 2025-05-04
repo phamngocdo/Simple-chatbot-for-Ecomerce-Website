@@ -55,7 +55,7 @@ async def login(request: Request, login_data: AuthLogin, db: Session = Depends(g
             httponly=True,
             secure=True,  
             samesite="Lax",
-            max_age=86400 * 7
+            max_age=86400 * 30  #1 month
         )
         return response
 
@@ -67,9 +67,6 @@ async def login(request: Request, login_data: AuthLogin, db: Session = Depends(g
 
 @auth_router.get("/login", response_class=HTMLResponse)
 async def login_page(request: Request):
-    token = request.cookies.get("access_token")
-    if token:
-        return RedirectResponse(url="/", status_code=302)
     return templates.TemplateResponse("login.html", {"request": request})
 
 
@@ -127,9 +124,6 @@ async def register(request: Request, register_data: AuthRegister, db: Session = 
 
 @auth_router.get("/register", response_class=HTMLResponse)
 async def register_page(request: Request):
-    token = request.cookies.get("access_token")
-    if token:
-        return RedirectResponse(url="/", status_code=302)
     return templates.TemplateResponse("register.html", {"request": request})
 
 

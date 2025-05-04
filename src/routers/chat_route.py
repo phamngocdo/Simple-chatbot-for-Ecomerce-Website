@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends, Request
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
-from pydantic import BaseModel
+from jwt import ExpiredSignatureError, InvalidTokenError
 from services.chat_service import ChatService
 from schemas.chat_schemas import ConversationUpdate, ConversationCreate, Message
 
@@ -18,6 +18,8 @@ async def get_conversation(request: Request):
             raise HTTPException(status_code=401, detail="Unauthorized")
         conversation = await ChatService.get_conversations(token=token)
         return conversation
+    except (ExpiredSignatureError, InvalidTokenError) as e:
+        raise HTTPException(status_code=401, detail="Unauthorized")
     except Exception as e:
         raise HTTPException(status_code=500, detail="Internal server error")
     
@@ -30,6 +32,8 @@ async def get_messages(conversation_id: str, request: Request):
             raise HTTPException(status_code=401, detail="Unauthorized")
         messages = await ChatService.get_messages_from_conversation(token=token, conversation_id=conversation_id)
         return messages
+    except (ExpiredSignatureError, InvalidTokenError) as e:
+        raise HTTPException(status_code=401, detail="Unauthorized")
     except Exception as e:
         raise HTTPException(status_code=500, detail="Internal server error")
     
@@ -48,6 +52,8 @@ async def create_new_conversation(conv: ConversationCreate, request: Request):
         name = conv.name
         await ChatService.create_new_conversation(token=token, name=name)
         return JSONResponse(status_code=200, content={"message": "Create new conversation successful"})
+    except (ExpiredSignatureError, InvalidTokenError) as e:
+        raise HTTPException(status_code=401, detail="Unauthorized")
     except Exception as e:
         raise HTTPException(status_code=500, detail="Internal server error")
 
@@ -76,6 +82,8 @@ async def update_conversations(conv: ConversationUpdate, request: Request):
         await ChatService.save_chat_data(token=token, chat_data=update_data)
         
         return JSONResponse(status_code=200, content={"message": "Conversation updated successfully"})
+    except (ExpiredSignatureError, InvalidTokenError) as e:
+        raise HTTPException(status_code=401, detail="Unauthorized")
 
     except Exception as e:
         raise HTTPException(status_code=500, detail="Internal server error")
@@ -90,6 +98,7 @@ async def delete_conversation(conversation_id: str, request: Request):
 
         await ChatService.delete_conversation(token=token, conversation_id=conversation_id)
         return JSONResponse(status_code=200, content={"message": "Delete conversation successfully"})
-    
+    except (ExpiredSignatureError, InvalidTokenError) as e:
+        raise HTTPException(status_code=401, detail="Unauthorized")
     except Exception as e:
         raise HTTPException(status_code=500, detail="Internal server error")

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
-from fastapi.security import OAuth2PasswordBearer
 from fastapi.responses import JSONResponse
+from jwt import InvalidTokenError, ExpiredSignatureError
 from sqlalchemy.orm import Session
 from services.users_service import UserService
 from schemas.user_schemas import UserUpdate
@@ -8,9 +8,6 @@ from schemas.user_schemas import UserUpdate
 from config.db_config import get_mysql_db as get_db
 
 users_router = APIRouter()
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
 
 @users_router.get("/me")
 async def get_current_user(request: Request, db: Session = Depends(get_db)):
@@ -22,6 +19,8 @@ async def get_current_user(request: Request, db: Session = Depends(get_db)):
         user = await UserService.get_current_user(token=token, db=db)
 
         return user
+    except (ExpiredSignatureError, InvalidTokenError) as e:
+        raise HTTPException(status_code=401, detail="Unauthorized")
     except Exception as e:
         raise HTTPException(status_code=500, detail="Internal server error")
     
@@ -39,6 +38,8 @@ async def update_password(data: UserUpdate, request: Request, db: Session = Depe
         }
         await UserService.update_current_user(token=token, user_data=user_data, db=db)
         return JSONResponse(status_code=200, content={"message": "Update password successfull"})
+    except (ExpiredSignatureError, InvalidTokenError) as e:
+        raise HTTPException(status_code=401, detail="Unauthorized")
     except ValueError as e:
         raise HTTPException(status_code=401, detail=str(e))
     except Exception as e:

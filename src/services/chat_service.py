@@ -1,5 +1,6 @@
 import traceback
 from uuid import uuid4
+from jwt import InvalidTokenError, ExpiredSignatureError
 from datetime import datetime
 from utils.security import decode_token
 from config.db_config import mongo_db as db
@@ -28,6 +29,8 @@ class ChatService:
                 }
             else:
                 return {"user_id": user_id, "conversations": []}
+        except (ExpiredSignatureError, InvalidTokenError) as e:
+            raise
         except Exception as e:
             traceback.print_exc()
             raise
@@ -52,6 +55,8 @@ class ChatService:
                 return data["conversations"][0]
             else:
                 return {}
+        except (ExpiredSignatureError, InvalidTokenError) as e:
+            raise
         except Exception as e:
             traceback.print_exc()
             raise
@@ -76,6 +81,8 @@ class ChatService:
             )
 
             return conv_id
+        except (ExpiredSignatureError, InvalidTokenError) as e:
+            raise
         except Exception as e:
             traceback.print_exc()
             raise
@@ -114,7 +121,8 @@ class ChatService:
                 },
                 update_data
             )
-
+        except (ExpiredSignatureError, InvalidTokenError) as e:
+            raise
         except Exception as e:
             traceback.print_exc()
             raise
@@ -133,6 +141,8 @@ class ChatService:
                     }
                 }
             )
+        except (ExpiredSignatureError, InvalidTokenError) as e:
+            raise
         except Exception as e:
             traceback.print_exc()
             raise

@@ -1,4 +1,5 @@
 import traceback
+from jwt import InvalidTokenError, ExpiredSignatureError
 from sqlalchemy.orm import Session
 from models.users_model import UserModel
 from utils.security import decode_token, verify_password, hash_password
@@ -37,6 +38,8 @@ class UserService():
                 user_dict = user.__dict__.copy()
                 user_dict.pop("password", None)
                 return user_dict
+        except (ExpiredSignatureError, InvalidTokenError) as e:
+            raise
         except Exception as e:
             traceback.print_exc()
             raise
@@ -65,6 +68,9 @@ class UserService():
             user_dict = user.__dict__.copy()
             user_dict.pop("password", None)
             return user_dict
+        
+        except (ExpiredSignatureError, InvalidTokenError) as e:
+            raise
         except Exception as e:
             traceback.print_exc()
             raise
