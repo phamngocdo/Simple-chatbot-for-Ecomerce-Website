@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
 import os
-from jwt import decode, encode
+from jwt import decode, encode, ExpiredSignatureError, InvalidTokenError
 
 load_dotenv()
 
@@ -26,5 +26,10 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     return encoded_jwt
 
 def decode_token(token: str):
-    payload = decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-    return payload
+    try:
+        payload = decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        return payload
+    except ExpiredSignatureError:
+        raise 
+    except InvalidTokenError:
+        raise 
