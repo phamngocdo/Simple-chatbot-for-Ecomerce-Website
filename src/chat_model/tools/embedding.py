@@ -18,7 +18,7 @@ def get_embedding(markdown_dir=DOCS_DIR, save_path=TRAINED_DIR / "vector_words" 
         latest_file_time = max([f.stat().st_mtime for f in markdown_dir.glob("*.md")])
         vector_db_time = save_path.stat().st_mtime 
 
-        if latest_file_time < vector_db_time:
+        if latest_file_time <= vector_db_time:
             return FAISS.load_local(str(save_path)) 
 
     text_splitter = RecursiveCharacterTextSplitter(
@@ -36,3 +36,5 @@ def get_embedding(markdown_dir=DOCS_DIR, save_path=TRAINED_DIR / "vector_words" 
     
     db.save_local(str(save_path))
     return db
+
+get_embedding()
