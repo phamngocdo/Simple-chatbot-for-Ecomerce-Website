@@ -29,5 +29,4 @@ def get_embedding(markdown_dir=DOCS_DIR, save_path=TRAINED_DIR / "vector_words" 
     db.save_local(str(save_path))
     return db
 
-# Chạy hàm get_embedding với các đường dẫn tương đối
 get_embedding()
