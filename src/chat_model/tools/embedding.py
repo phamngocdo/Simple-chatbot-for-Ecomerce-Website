@@ -1,5 +1,6 @@
 from pathlib import Path
 from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.tools import Tool, tool
 from langchain_community.embeddings import GPT4AllEmbeddings
 from langchain_community.document_loaders import DirectoryLoader, TextLoader
 from langchain_community.vectorstores import FAISS
@@ -13,6 +14,13 @@ def load_markdown_from_dir(dir_path):
     return [doc.page_content for doc in documents]
 
 def get_embedding(markdown_dir=DOCS_DIR, save_path=TRAINED_DIR / "vector_words" / "from_guides"):
+    if save_path.exists():
+        latest_file_time = max([f.stat().st_mtime for f in markdown_dir.glob("*.md")])
+        vector_db_time = save_path.stat().st_mtime 
+
+        if latest_file_time < vector_db_time:
+            return FAISS.load_local(str(save_path)) 
+
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=512, 
         chunk_overlap=50,
@@ -28,5 +36,3 @@ def get_embedding(markdown_dir=DOCS_DIR, save_path=TRAINED_DIR / "vector_words" 
     
     db.save_local(str(save_path))
     return db
-
-get_embedding()
