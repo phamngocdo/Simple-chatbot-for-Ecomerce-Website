@@ -189,33 +189,44 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!userMessage) return;
 
     messagesContainer.innerHTML = '';
-
     messagesContainer.appendChild(createMessageElement({ role: 'user', content: userMessage }));
-    messagesContainer.appendChild(createMessageElement({ role: 'bot', content: "This is a default bot response." }));
+
+    const botMsgElem = createMessageElement({ role: 'bot', content: "..." });
+    messagesContainer.appendChild(botMsgElem);
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-    const payload = {
-      id: currentConversationId ? currentConversationId : null,
-      name: currentConversationId ? null : "New Conversation",
-      messages: [
-        { role: 'user', content: userMessage },
-        { role: 'chatbot', content: "This is a default bot response." }
-      ]
-    };
-
     try {
-      const res = await fetch('/api/chat/conversations', {
+      const query = `/api/chat/response?message=${encodeURIComponent(userMessage)}`
+        + (currentConversationId ? `&conversation_id=${currentConversationId}` : '');
+
+      const res = await fetch(query);
+      if (!res.ok) throw new Error("Failed to get response");
+
+      const result = await res.json();
+      const botReply = result.response || "Sorry, I couldn't understand.";
+
+      botMsgElem.querySelector('.message-content').textContent = botReply;
+
+      const payload = {
+        id: currentConversationId ? currentConversationId : null,
+        name: currentConversationId ? null : "New Conversation",
+        messages: [
+          { role: 'user', content: userMessage },
+          { role: 'chatbot', content: botReply }
+        ]
+      };
+
+      const saveRes = await fetch('/api/chat/conversations', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
 
-      if (!res.ok) throw new Error();
+      if (!saveRes.ok) throw new Error("Failed to save conversation");
 
-      const result = await res.json();
-
-      if (!currentConversationId && result.id) {
-        currentConversationId = result.id;
+      const saveResult = await saveRes.json();
+      if (!currentConversationId && saveResult.id) {
+        currentConversationId = saveResult.id;
       }
 
       await loadConversations();
@@ -228,7 +239,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
     } catch (e) {
-      alert("Failed to save messages.");
+      console.error(e);
+      botMsgElem.querySelector('.message-content').textContent = "⚠️ Failed to get response.";
     }
 
     messageInputField.value = '';

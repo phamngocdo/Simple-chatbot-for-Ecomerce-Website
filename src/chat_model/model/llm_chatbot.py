@@ -9,7 +9,12 @@ from langchain.agents import initialize_agent, AgentType
 from langchain.agents.agent_toolkits import create_retriever_tool
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import GPT4AllEmbeddings
-from tools.fetch_data import tools as fetch_api_tools
+from .fetch_api_tools import tools as fetch_api_tools
+from .embedding import embedding_data
+
+# Enable this when you run this file
+# from fetch_api_tools import tools as fetch_api_tools
+# from embedding import embedding_data
 
 load_dotenv()
 
@@ -26,6 +31,8 @@ class LlmChatBot:
     def __init__(self, model="openai/gpt-3.5-turbo", embedding_model=TRAINED_DIR / "all-MiniLM-L6-v2.F32.gguf"):
         if not hasattr(self, "initialized"):
             self.VECTOR_WORDS = TRAINED_DIR / "vector_words" / "from_guides"
+
+            embedding_data()
             
             self.embedding = GPT4AllEmbeddings(
                 model_file=embedding_model,
@@ -98,7 +105,7 @@ class LlmChatBot:
             description="Search information from internal docs"
         )
 
-    def load_old_conversation_to_memory(self, user_id, messages: list):
+    def load_old_conversation_to_memory(self, user_id: str, messages: list):
         if user_id not in self.user_memory:
             self.user_memory[user_id] = ConversationBufferMemory(
                 memory_key="chat_history",
@@ -109,6 +116,9 @@ class LlmChatBot:
 
         user_memory = self.user_memory[user_id]
         user_memory.clear()
+        if not messages:
+            return 
+        
         for msg in messages:
             if msg["role"] == "user":
                 user_memory.chat_memory.add_user_message(msg["content"])
@@ -118,7 +128,7 @@ class LlmChatBot:
 
 
 
-    def get_response(self, user_id, user_input: str) -> str:
+    def get_response(self, user_id: str, user_input: str) -> str:
         def clean_user_input(user_input: str) -> str:
             allowed_punctuation = r"[.,;:?]"
             cleaned_input = re.sub(rf"[^\w\s{allowed_punctuation}]", "", user_input)
@@ -146,7 +156,7 @@ class LlmChatBot:
 
 if __name__ == "__main__":
     bot = LlmChatBot()
-    user_id = "123"
+    user_id = "1"
     while True:
         user_input = input("User: ")
         print(f"Bot: {bot.get_response(user_id=user_id, user_input=user_input)} ")

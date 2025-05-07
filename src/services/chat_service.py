@@ -2,8 +2,14 @@ import traceback
 from uuid import uuid4
 from jwt import InvalidTokenError, ExpiredSignatureError
 from datetime import datetime
+from chat_model.model.llm_chatbot import LlmChatBot
 from utils.security import decode_token
 from config.db_config import mongo_db as db
+
+import warnings
+from langchain_core._api.deprecation import LangChainDeprecationWarning
+
+warnings.filterwarnings("ignore", category=LangChainDeprecationWarning)
 
 class ChatService:
 
@@ -56,7 +62,7 @@ class ChatService:
 
             if data and "conversations" in data and len(data["conversations"]) > 0:
                 return data["conversations"][0]
-            return {"messages": []} 
+            return None
             
         except (ExpiredSignatureError, InvalidTokenError) as e:
             raise
@@ -171,5 +177,22 @@ class ChatService:
 
 
     @staticmethod
-    async def get_response(user_id: str, message: str) -> str:
-        pass
+    async def get_response(token: str, message: str, old_message: dict) -> str:
+        try:
+            user_id = str(decode_token(token).get("sub"))
+
+            llm_chat = LlmChatBot()
+            
+            if not old_message:
+                print("Loading")
+                llm_chat.load_old_conversation_to_memory(user_id=user_id, messages=old_message)
+                print("Loading done")
+            
+            return llm_chat.get_response(user_id=user_id, user_input=message)
+        except Exception as e:
+            traceback.print_exc()
+            raise
+        
+
+
+

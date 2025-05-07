@@ -15,7 +15,7 @@ async def get_review(review_id:int, db: Session = Depends(get_db)):
             raise HTTPException(status_code=404, detail="Review not found")
         return review
     except Exception as e:
-        raise HTTPException(status_code=500, detail="Internal server error")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {e}")
     
 
 @reviews_router.get("/product/{product_id}")
@@ -28,4 +28,4 @@ async def get_review_by_product(product_id: int, db: Session = Depends(get_db)):
             raise HTTPException(status_code=404, detail="Product does not have review yet")
         return reviews
     except Exception as e:
-        raise HTTPException(status_code=500, detail="Internal server error")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {e}")

@@ -13,7 +13,7 @@ def load_markdown_from_dir(dir_path):
     documents = loader.load()
     return [doc.page_content for doc in documents]
 
-def get_embedding(markdown_dir=DOCS_DIR, save_path=TRAINED_DIR / "vector_words" / "from_guides"):
+def embedding_data(markdown_dir=DOCS_DIR, save_path=TRAINED_DIR / "vector_words" / "from_guides"):
     if save_path.exists():
         latest_file_time = max([f.stat().st_mtime for f in markdown_dir.glob("*.md")])
         vector_db_time = save_path.stat().st_mtime 
@@ -37,4 +37,4 @@ def get_embedding(markdown_dir=DOCS_DIR, save_path=TRAINED_DIR / "vector_words" 
     db.save_local(str(save_path))
     return db
 
-get_embedding()
+embedding_data()

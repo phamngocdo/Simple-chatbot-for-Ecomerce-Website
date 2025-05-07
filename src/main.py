@@ -15,6 +15,8 @@ from routers.chat_route import chat_router
 from routers.auth_route import auth_router
 from routers.web_route import web_router
 
+from chat_model.model.llm_chatbot import LlmChatBot
+
 SRC_DIR = Path(__file__).resolve().parent
 
 load_dotenv() 
@@ -56,5 +58,6 @@ def start():
     )
 
 if __name__ == "__main__":
+    llm_chatbot = LlmChatBot()
     start()
 

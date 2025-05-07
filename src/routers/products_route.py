@@ -14,7 +14,7 @@ async def get_all_products(db: Session = Depends(get_db)):
             raise HTTPException(status_code=404, detail="No products found")
         return products
     except Exception as e:
-        raise HTTPException(status_code=500, detail="Internal server error")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {e}")
     
 
 @products_router.get("/{product_id}")
@@ -28,4 +28,4 @@ async def get_product(product_id: int, db: Session = Depends(get_db)):
         
         return product
     except Exception as e:
-        raise HTTPException(status_code=500, detail="Internal server error")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {e}")
