@@ -8,7 +8,7 @@ from langchain.memory import ConversationBufferMemory
 from langchain.agents import initialize_agent, AgentType
 from langchain.agents.agent_toolkits import create_retriever_tool
 from langchain_community.vectorstores import FAISS
-from langchain_community.embeddings import GPT4AllEmbeddings
+from langchain_huggingface.embeddings import HuggingFaceEmbeddings
 from .fetch_api_tools import tools as fetch_api_tools
 from .embedding import embedding_data
 
@@ -28,16 +28,11 @@ class LlmChatBot:
             cls._instance = super().__new__(cls)
         return cls._instance
     
-    def __init__(self, model="openai/gpt-3.5-turbo", embedding_model=TRAINED_DIR / "all-MiniLM-L6-v2.F32.gguf"):
+    def __init__(self, model="openai/gpt-3.5-turbo", embedding_model="sentence-transformers/all-MiniLM-L6-v2"):
         if not hasattr(self, "initialized"):
             self.VECTOR_WORDS = TRAINED_DIR / "vector_words" / "from_guides"
-
-            embedding_data()
             
-            self.embedding = GPT4AllEmbeddings(
-                model_file=embedding_model,
-                device='cpu'
-            )
+            self.embedding = HuggingFaceEmbeddings(model_name=embedding_model)
             
             self.vector_words = FAISS.load_local(
                 folder_path=self.VECTOR_WORDS,
