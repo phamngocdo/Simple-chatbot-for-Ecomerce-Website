@@ -1,0 +1,47 @@
+services:
+  fastapi:
+    build: .
+    container_name: chabot_app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+      - mongodb
+    environment:
+      REDIS_URL: ${REDIS_URL}
+      SECRET_KEY: ${SECRET_KEY}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      APP_GMAIL: ${APP_GMAIL}
+      APP_GMAIL_PASS: ${APP_GMAIL_PASS}
+      OPENROUTER_API: ${OPENROUTER_API}
+
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_NAME: ${MYSQL_NAME}
+      MYSQL_PASS: ${MYSQL_PASS}
+      MYSQL_PORT: ${MYSQL_PORT}
+    volumes:
+      - ./data:/docker-entrypoint-initdb.d
+      - mysql_data:/var/lib/mysql
+
+  mongodb:
+    image: mongo:6
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_URI: ${MONGO_URI}
+      MONGO_DB_NAME: ${MONGO_DB_NAME}
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
+  mysql_data:

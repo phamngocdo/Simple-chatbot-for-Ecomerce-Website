@@ -9,7 +9,6 @@ datetime
 unstructured
 Markdown
 authlib
-gpt4all=2.8.2
 pymongo
 passlib==1.7.4
 bcrypt==3.2.2

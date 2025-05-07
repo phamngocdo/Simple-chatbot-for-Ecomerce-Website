@@ -8,10 +8,10 @@ load_dotenv()
 
 # ================= MySQL Config =================
 MYSQL_CONFIG = {
-    "host": os.getenv("MYSQL_HOST"),
-    "user": os.getenv("MYSQL_USER"),
+    "host": os.getenv("MYSQL_HOST", "localhost"),
+    "user": os.getenv("MYSQL_USER", "root"),
     "password": os.getenv("MYSQL_PASS"),
-    "database": os.getenv("MYSQL_NAME"),
+    "database": os.getenv("MYSQL_NAME", "uet_store"),
     "port": os.getenv("MYSQL_PORT", "3306")
 }
 
