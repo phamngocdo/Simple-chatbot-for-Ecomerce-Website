@@ -4,6 +4,15 @@
 ## Introduction
 This is version 2.0 of the chatbot developed for UETStore, an e-commerce platform (you can explore the project via the [Github](https://github.com/Thanhlam43k4/ecommerce-website) and [Figma](https://www.figma.com/design/xPDkX9WSgpFdgxWyE12h7T/Ecommerce-Web---Group-11-s-Project?t=SlOD9XFq1hBBfJRH-0) ). The chatbot has been upgraded into an AI-powered agent with a modern, user-friendly chat interface. It is designed to assist users by answering questions related to the UETStore website, available products, and how to navigate and use the platform effectively.
 
+User interface:
+
+![](./images/home.png)
+![](./images/login.png)
+![](./images/register.png)
+![](./images/example1.png)
+![](./images/example2.png)
+
+
 ## Build with
 - **Languages:** Python3, Javascript
 - **UI:** HTML, CSS
