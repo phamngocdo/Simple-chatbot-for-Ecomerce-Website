@@ -53,11 +53,12 @@ async def get_response_from_chatbot(message: str, request: Request, conversation
         if conversation_id:
             old_messages = await ChatService.get_messages_from_conversation(token, conversation_id)
 
-        return await ChatService.get_response(token=token, message=message, old_message=old_messages)
-        
+        result = await ChatService.get_response(token=token, message=message, old_message=old_messages)
+        return JSONResponse(status_code=200, content={"answer": result})
+
     except (ExpiredSignatureError, InvalidTokenError) as e:
         raise HTTPException(status_code=401, detail=f"Unauthorized: {e}")
-    except Exception as e:
+    except (Exception, TimeoutError) as e:
         raise HTTPException(status_code=500, detail=f"Internal server error: {e}")
     
 

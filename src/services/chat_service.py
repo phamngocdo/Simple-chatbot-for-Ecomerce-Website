@@ -5,6 +5,7 @@ from datetime import datetime
 from chat_model.model.llm_chatbot import LlmChatBot
 from utils.security import decode_token
 from config.db_config import mongo_db as db
+import asyncio
 
 import warnings
 from langchain_core._api.deprecation import LangChainDeprecationWarning
@@ -177,10 +178,9 @@ class ChatService:
 
 
     @staticmethod
-    async def get_response(token: str, message: str, old_message: dict) -> str:
+    async def get_response(token: str, message: str, old_message: dict, timeout = 30) -> str:
         try:
             user_id = str(decode_token(token).get("sub"))
-
             llm_chat = LlmChatBot()
             
             if not old_message:
@@ -188,7 +188,16 @@ class ChatService:
                 llm_chat.load_old_conversation_to_memory(user_id=user_id, messages=old_message)
                 print("Loading done")
             
-            return llm_chat.get_response(user_id=user_id, user_input=message)
+            task = asyncio.create_task(
+                asyncio.to_thread(llm_chat.get_response, user_id=user_id, user_input=message)
+            )
+            
+            try:
+                return await asyncio.wait_for(task, timeout=timeout)
+            except asyncio.TimeoutError:
+                task.cancel() 
+                raise TimeoutError(f"LLM response timed out after {timeout} seconds")
+                
         except Exception as e:
             traceback.print_exc()
             raise

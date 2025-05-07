@@ -178,17 +178,18 @@ document.addEventListener("DOMContentLoaded", () => {
     div.innerHTML = `
       <div class="avatar"><i class="fas fa-${message.role === 'user' ? 'user' : 'robot'}"></i></div>
       <div class="message-content">
-        <div class="message-text">${message.content}</div>
+        <div class="message-text" style="white-space: pre-wrap;">${message.content}</div>
       </div>
     `;
     return div;
   }
 
   async function sendMessage() {
+    if (!currentConversationId) messagesContainer.innerHTML = '';
     const userMessage = messageInputField.value.trim();
     if (!userMessage) return;
+    messageInputField.value = ''
 
-    messagesContainer.innerHTML = '';
     messagesContainer.appendChild(createMessageElement({ role: 'user', content: userMessage }));
 
     const botMsgElem = createMessageElement({ role: 'bot', content: "..." });
@@ -203,7 +204,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!res.ok) throw new Error("Failed to get response");
 
       const result = await res.json();
-      const botReply = result.response || "Sorry, I couldn't understand.";
+      console.log(result)
+      let botReply = result.answer || "Sorry, I couldn't understand.";
 
       botMsgElem.querySelector('.message-content').textContent = botReply;
 
@@ -240,7 +242,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     } catch (e) {
       console.error(e);
-      botMsgElem.querySelector('.message-content').textContent = "⚠️ Failed to get response.";
+      botMsgElem.querySelector('.message-content').textContent = "Server is having issue. Please try again later.";
     }
 
     messageInputField.value = '';

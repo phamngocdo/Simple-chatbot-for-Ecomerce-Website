@@ -125,11 +125,9 @@ class LlmChatBot:
 
     def get_response(self, user_id: str, user_input: str) -> str:
         def clean_user_input(user_input: str) -> str:
-            allowed_punctuation = r"[.,;:?]"
-            cleaned_input = re.sub(rf"[^\w\s{allowed_punctuation}]", "", user_input)
-            
-            cleaned_input = re.sub(r"\s+", " ", cleaned_input).strip()
-
+            allowed_punctuation = r".,;:?"
+            cleaned_input = re.sub(rf"[^\w\s{re.escape(allowed_punctuation)}\n]", "", user_input)
+            cleaned_input = "\n".join(line.strip() for line in cleaned_input.splitlines())
             return cleaned_input
         
         try:
