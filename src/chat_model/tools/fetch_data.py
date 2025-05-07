@@ -8,9 +8,9 @@ load_dotenv()
 API_URL = f"http://localhost:{int(os.getenv("PORT", 3000))}/api"
 
 
-def fetch_all_product_data():
+def fetch_all_product_data(input=None):
     try:
-        response = requests.get(f"{API_URL}products/") 
+        response = requests.get(f"{API_URL}/products/") 
         if response.status_code == 200:
             products = response.json()
             return products  
@@ -20,9 +20,9 @@ def fetch_all_product_data():
         return {"error": str(e)}
 
 
-def fetch_product_from_id(product_id: int):
+def fetch_product_from_id(product_id: int, input=None):
     try:
-        response = requests.get(f"{API_URL}products/{product_id}") 
+        response = requests.get(f"{API_URL}/products/{product_id}") 
         if response.status_code == 200:
             products = response.json()
             return products  
@@ -32,7 +32,7 @@ def fetch_product_from_id(product_id: int):
         return {"error": str(e)}
 
 
-def fetch_review_from_id(review_id: int):
+def fetch_review_from_id(review_id: int, input=None):
     try:
         response = requests.get(f"{API_URL}/reviews/{review_id}") 
         if response.status_code == 200:
@@ -44,7 +44,7 @@ def fetch_review_from_id(review_id: int):
         return {"error": str(e)}
 
 
-def fetch_reviews_from_product_id(product_id: int):
+def fetch_reviews_from_product_id(product_id: int, input=None):
     try:
         response = requests.get(f"{API_URL}/reviews/product/{product_id}") 
         if response.status_code == 200:
