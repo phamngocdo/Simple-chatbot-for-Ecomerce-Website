@@ -77,7 +77,7 @@ class LlmChatBot:
         4. Other general inquiries  
         If the user's question is outside these topics, respond with:  
         "Sorry, I can only answer questions related to our website and services. If you need further assistance, please contact us at Phone: +843949505816 or Email: group11@gmail.com."
-        Always ensure your answer is clear, detailed, and concise.  
+        Always ensure your answer is clear, detailed, and concise. Avoid using any markdown formatting, special symbols, or non-standard characters.        
         """
 
     def _create_retrieval_tool(self):
