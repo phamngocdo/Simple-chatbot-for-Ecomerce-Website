@@ -31,4 +31,6 @@ def embedding_data(markdown_dir=DOCS_DIR, save_path=TRAINED_DIR / "vector_words"
     db.save_local(str(save_path))
     return db
 
-embedding_data()
+if __name__ == "__main__":
+    embedding_data()
+    print(f"Embeddings saved to {TRAINED_DIR / 'vector_words' / 'from_guides'}")

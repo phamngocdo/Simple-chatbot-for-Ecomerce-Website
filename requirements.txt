@@ -17,3 +17,4 @@ Authlib==1.5.2
 itsdangerous==2.2.0
 redis==6.0.0
 aiosmtplib==4.0.1
+dvc[drive]

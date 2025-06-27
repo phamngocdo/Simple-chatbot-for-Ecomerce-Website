@@ -2,3 +2,5 @@
 .vscode/
 logs/
 *.log
+.dvc/
+/data
