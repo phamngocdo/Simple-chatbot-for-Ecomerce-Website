@@ -18,7 +18,7 @@ User interface:
 - **UI:** HTML, CSS
 - **Frameworks:** Langchain, FastAPI
 - **Databases:** MySQL, MongoDB
-- **Tools:** Docker, Postman
+- **Tools:** Docker, Postman, DVC
 - **Services:** GoogleOauth2, Openrouter (use gpt3.5 model)
 
 ## Set up
