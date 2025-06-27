@@ -1,0 +1,6 @@
+stages:
+  build_embedding:
+    cmd: python src/chat_model/model/embedding.py
+    deps:
+    - src/chat_model/docs/
+    - src/chat_model/model/embedding.py

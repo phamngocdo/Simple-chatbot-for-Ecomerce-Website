@@ -38,6 +38,10 @@ User interface:
 3. Generate a new API key
 4. Add it to the .env file under OPENROUTER_API
 
+### Pull data (via DVC)
+This project uses [DVC](https://dvc.org/) with **Google Drive** to manage dataset and embedding files.
+To pull the required data, please contact the author to receive the secure access key (`key.json`):
+
 ### Run app
 First, you clone this project by Git:
 ``` bash
@@ -68,7 +72,7 @@ OPENROUTER_API=type_your_key
 
 Install docker if you don't have, then:
 ```bash
-docker compose up --build
+docker compose up -d
 
 ```
 To stop app:

@@ -1,12 +1,11 @@
 from pathlib import Path
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.embeddings import GPT4AllEmbeddings
 from langchain_community.document_loaders import DirectoryLoader, TextLoader
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface.embeddings import HuggingFaceEmbeddings
 
 DOCS_DIR = Path(__file__).resolve().parent.parent / "docs"
-TRAINED_DIR = Path(__file__).resolve().parent.parent / "trained"
+TRAINED_DIR = Path(__file__).resolve().parent / "trained"
 
 def load_markdown_from_dir(dir_path):
     loader = DirectoryLoader(str(dir_path), glob="*.md", loader_cls=TextLoader)

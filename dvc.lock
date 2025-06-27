@@ -1,0 +1,14 @@
+schema: '2.0'
+stages:
+  build_embedding:
+    cmd: python src/chat_model/model/embedding.py
+    deps:
+    - path: src/chat_model/docs/
+      hash: md5
+      md5: 2e2c872fd27f40c842a738a1a93cd6ef.dir
+      size: 3928
+      nfiles: 2
+    - path: src/chat_model/model/embedding.py
+      hash: md5
+      md5: dc553dda92343a96b4794ea0c6b18275
+      size: 1436
