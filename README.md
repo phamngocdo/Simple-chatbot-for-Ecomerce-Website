@@ -40,7 +40,12 @@ User interface:
 
 ### Pull data (via DVC)
 This project uses [DVC](https://dvc.org/) with **Google Drive** to manage dataset and embedding files.
-To pull the required data, please contact the author to receive the secure access key (`key.json`):
+To pull the required data, please contact the author to receive the secure access key (`key.json`), then run:
+```bash
+dvc remote modify gdrive gdrive_use_service_account true
+dvc remote modify gdrive gdrive_service_account_json_file_path secrets/dvc-remote-key-viewer.json
+```
+
 
 ### Run app
 First, you clone this project by Git:
